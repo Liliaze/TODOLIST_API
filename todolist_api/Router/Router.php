@@ -5,15 +5,16 @@
  * Date: 12/11/2019
  * Time: 11:58
  */
-namespace Router;
 
-require ("RouterException");
+require './Controller/AccountController.php';
+require 'RouterException.php';
 
 class Router
 {
 
     private $_url;
     private $_argcUrl;
+    private $_data;
     private $_method;
 
     public function __construct() {
@@ -22,34 +23,34 @@ class Router
         $this->_method = '';
     }
 
-    private function getRoutes($url, $count) {
+    private function getRoutes($url, $argumentCount) {
         // GET users
-        if ($count == 2 && $url[0] == "users")
+        if ($argumentCount == 2 && $url[0] == "users")
             echo json_encode("get method : users/myName");
         // GET lists
-        else if ($count == 1 && $url[0] == "lists")
+        else if ($argumentCount == 1 && $url[0] == "lists")
             echo json_encode("get method : lists");
         // GET lists/mylist
-        else if ($count == 2 && $url[0] == "lists")
+        else if ($argumentCount == 2 && $url[0] == "lists")
             echo json_encode("get method : lists/exemple");
         // GET tasks
-        else if ($count == 1 && $url[0] == "tasks")
+        else if ($argumentCount == 1 && $url[0] == "tasks")
             echo json_encode("get method : tasks");
         // GET tasks/1
-        else if ($count == 2 && $url[0] == "tasks")
+        else if ($argumentCount == 2 && $url[0] == "tasks")
             echo json_encode("get method : tasks/1");
         // GET other
         else
             throw new RouterException('No routes matches');
     }
 
-    private function postRoutes($url, $count)
+    private function postRoutes($url, $argumentCount, $data)
     {
-        //to do
-        echo json_encode("post method".$url[0]);
+        if ($argumentCount == 1 && $url[0] == "user")
+            return \Controller\AccountController::getInstance()->signup($data);
     }
 
-    private function deleteRoutes($url, $count)
+    private function deleteRoutes($url, $argumentCount)
     {
         //to do
         echo json_encode("delete method".$url[0]);
@@ -61,20 +62,22 @@ class Router
             if (isset($_GET['url'])) {
                 $this->_url = explode('/',$_GET['url']);
                 $this->_argcUrl = count($this->_url);
-            }
-            switch ($this->_method) {
-                case 'GET' :
-                    $this->getRoutes($this->_url, $this->_argcUrl);
-                    break;
-                case 'POST' :
-                    $this->postRoutes($this->_url, $this->_argcUrl);
-                    break;
-                case 'DELETE' :
-                    $this->deleteRoutes($this->_url, $this->_argcUrl);
-                    break;
-                default:
-                    throw new RouterException('No Request Method Matches');
-                    break;
+                $this->_data = json_decode(file_get_contents('php://input'), true);
+
+                switch ($this->_method) {
+                    case 'GET' :
+                        $this->getRoutes($this->_url, $this->_argcUrl);
+                        break;
+                    case 'POST' :
+                        return $this->postRoutes($this->_url, $this->_argcUrl, $this->_data);
+                        break;
+                    case 'DELETE' :
+                        $this->deleteRoutes($this->_url, $this->_argcUrl);
+                        break;
+                    default:
+                        throw new RouterException('No Request Method Matches');
+                        break;
+                }
             }
         } else {
             throw new RouterException('Missing request method');

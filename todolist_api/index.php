@@ -1,10 +1,11 @@
 <?php
 
-require("./Router/Router.php");
+require './Router/Router.php';
 
 try {
+
     $router = new Router();
-    $router->run();
+    $result = $router->run();
     //to do erase all echo.
     echo json_encode($result);
     }
