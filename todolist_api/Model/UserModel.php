@@ -11,19 +11,46 @@
  */
 class UserModel
 {
+
+    private $id = 0;
     private $username = null;
     private $password = null;
-    private $encode_password = null;
-    private $id = 0;
+    private $token = null;
 
     /**
      * @param $username
      * @param $password
      */
-    public function setUser($username, $password)
+
+    public function setUserByRequest($pdoResults)
     {
+        $this->setId($pdoResults['id']);
+        $this->setUsername($pdoResults['username']);
+        $this->setPassword($pdoResults['password']);
+        $this->setToken($pdoResults['token']);
+    }
+
+    public function setUser($id, $username, $password, $token)
+    {
+        $this->setId($id);
         $this->setUsername($username);
         $this->setPassword($password);
+        $this->setToken($token);
+    }
+    /**
+     * @return null
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param null $token
+     */
+    public function setToken($token)
+    {
+        $this->token = $token;
     }
 
     /**
@@ -56,22 +83,6 @@ class UserModel
     public function setPassword($password)
     {
         $this->password = $password;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEncodePassword()
-    {
-        return $this->encode_password;
-    }
-
-    /**
-     * @param mixed $encode_password
-     */
-    public function setEncodePassword($encode_password)
-    {
-        $this->encode_password = $encode_password;
     }
 
     /**

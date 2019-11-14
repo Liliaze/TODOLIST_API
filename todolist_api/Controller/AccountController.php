@@ -22,7 +22,6 @@ class AccountController
     }
 
     public function signup($data) {
-        var_dump($data);
         if (isset($data['userName']) && isset($data['password'])) //check username validity
             return \AuthentificationService::getInstance()->createUser($data['userName'], $data['password']);
         return "fail";

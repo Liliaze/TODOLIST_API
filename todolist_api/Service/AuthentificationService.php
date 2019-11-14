@@ -7,7 +7,7 @@
  */
 require "./Repository/UserRepository.php";
 require "FormatException.php";
-require "./Model/UserModel.php";
+require_once "./Model/UserModel.php";
 
 class AuthentificationService
 {
@@ -20,6 +20,18 @@ class AuthentificationService
         }
         self::$instance = new AuthentificationService();
         return self::$instance;
+    }
+
+    public function createUser($username, $password)
+    {
+        //check the format and availability of datas
+        if ($this->checkUsernameFormat($username) && $this->checkPasswordFormat($password) &&
+            $this->checkAvailabilityUserName($username)) {
+            $newUser = new UserModel();
+            $newUser->setUser(null, $username, $this->encodePassword($password), $this->generateToken());
+            return \UserRepository::getInstance()->createUser($newUser);
+        }
+        throw new Exception('bad format for username or password');
     }
 
     private function checkUserNameFormat($username) {
@@ -36,10 +48,9 @@ class AuthentificationService
     }
 
     private function checkPasswordFormat($password) {
-
         if(!empty($password) && $password != "" ) {
-            if (strlen($password) <= 8) {
-                throw new FormatException('Password must contain ct least 8 Digits !');
+            if (strlen($password) < 6 || strlen($password) > 12) {
+                throw new FormatException('Password must contain between 6 and 12 characters !');
             } else if (!preg_match("#[0-9]+#", $password)) {
                 throw new FormatException('Password must contain at least 1 Number !');
             } else if (!preg_match("#[A-Z]+#", $password)) {
@@ -56,19 +67,22 @@ class AuthentificationService
     private function checkAvailabilityUserName($username)
     {
         $userFindName = \UserRepository::getInstance()->getUserByUsername($username)->getUserName();
+
         if ($userFindName == $username) {
             throw new Exception('This username is already used ! Please login or choose another');
         }
         return true;
     }
 
-    public function createUser($username, $password)
+    private function encodePassword($password) {
+        $encodePassword = md5($password);
+        return $encodePassword;
+    }
+
+
+    private function generateToken()
     {
-        //check the format and availability of datas
-        if ($this->checkPasswordFormat($password) && $this->checkUsernameFormat($username) &&
-        $this->checkAvailabilityUserName($username)) {
-            return \UserRepository::getInstance()->createUser($username, $password);
-        }
-        throw new Exception('bad format for username or password');
+        //to do creation of token
+        return ("abcd1234-*/");
     }
 }
