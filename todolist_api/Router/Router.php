@@ -7,7 +7,7 @@
  */
 
 require './Controller/AccountController.php';
-require 'RouterException.php';
+require './Exception/RouterException.php';
 
 class Router
 {

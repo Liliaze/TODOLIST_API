@@ -5,9 +5,8 @@
  * Date: 12/11/2019
  * Time: 13:25
  */
-require "./Repository/UserRepository.php";
-require "FormatException.php";
-require_once "./Model/UserModel.php";
+
+require_once "./Repository/UserRepository.php";
 
 class AuthentificationService
 {
@@ -69,7 +68,7 @@ class AuthentificationService
         $userFindName = \UserRepository::getInstance()->getUserByUsername($username)->getUserName();
 
         if ($userFindName == $username) {
-            throw new Exception('This username is already used ! Please login or choose another');
+            throw new ConflictException('This username is already used ! Please login or choose another');
         }
         return true;
     }

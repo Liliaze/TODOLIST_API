@@ -1,6 +1,9 @@
 <?php
 
-require './Router/Router.php';
+require_once './Router/Router.php';
+require_once "./Model/UserModel.php";
+
+header('Content-Type: application/json');
 
 try {
 
@@ -9,7 +12,7 @@ try {
     //to do erase all echo.
     echo json_encode($result);
     }
-catch(Exception $e) {
-   //todo return no echo but template error intern
+catch (Exception $e) {
+   //todo
    echo json_encode('Erreur : ' . $e->getMessage());
 }
