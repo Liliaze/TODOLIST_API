@@ -41,13 +41,13 @@ class Router
             echo json_encode("get method : tasks/1");
         // GET other
         else
-            throw new RouterException('No routes matches');
+            throw new FormatException('No routes matches');
     }
 
     private function postRoutes($url, $argumentCount, $data)
     {
         if ($argumentCount == 1 && $url[0] == "user")
-            return \Controller\AccountController::getInstance()->signup($data);
+            return \AccountController::getInstance()->signup($data);
     }
 
     private function deleteRoutes($url, $argumentCount)
@@ -75,12 +75,12 @@ class Router
                         $this->deleteRoutes($this->_url, $this->_argcUrl);
                         break;
                     default:
-                        throw new RouterException('No Request Method Matches');
+                        throw new FormatException('No Request Method Matches');
                         break;
                 }
             }
         } else {
-            throw new RouterException('Missing request method');
+            throw new FormatException('Missing request method');
         }
     }
 }

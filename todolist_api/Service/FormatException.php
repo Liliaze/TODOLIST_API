@@ -1,4 +1,5 @@
 <?php
+namespace Service;
 
 /**
  * Created by PhpStorm.
@@ -8,7 +9,7 @@
  */
 
 
-class RouterException extends \Exception
+class FormatException extends \Exception
 {
 
 }

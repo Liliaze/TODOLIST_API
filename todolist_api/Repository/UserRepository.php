@@ -6,6 +6,7 @@
  * Time: 13:24
  */
 
+
 class UserRepository
 {
     private static $instance = null;
@@ -18,7 +19,17 @@ class UserRepository
         return self::$instance;
     }
 
-    public function createUser($userName, $password) {
-        return "youpi".$userName.$password;
+    public function createUser($username, $password) {
+        //tmp result to test
+        //to do
+        return "youpi".$username.$password;
+    }
+
+    public function getUserByUsername($username) {
+        //tmp user to test
+        //to do
+        $userTest = new UserModel();
+        $userTest->setUsername("diana");
+        return $userTest;
     }
 }

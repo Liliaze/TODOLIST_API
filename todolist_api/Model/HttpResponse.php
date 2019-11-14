@@ -6,9 +6,6 @@
  * Time: 14:47
  */
 
-namespace Model;
-
-
 class HttpResponse
 {
     private $_code;
