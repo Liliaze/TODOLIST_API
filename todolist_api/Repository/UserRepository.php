@@ -34,7 +34,7 @@ class UserRepository
         $request->bindParam(':u', $username);
         $request->execute();
         $pdoresults = $request->fetchAll();
-        $user = new ListModel();
+        $user = new UserModel();
         if ($pdoresults != null && isset($pdoresults[0])) {
             $user->setUserByRequest($pdoresults[0]);
         }

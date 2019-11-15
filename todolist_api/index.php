@@ -8,17 +8,23 @@ require_once './Exception/UnauthorizedException.php';
 
 $HttpResponse = new HttpResponseModel();
 try {
-    header('Content-Type: application/json');
-
     $router = new Router();
-    $result = $router->run();
-    //to do erase all echo.
-    echo json_encode($result);
+    $HttpResponse = $router->run();
     }
 catch (Exception $e) {
     $HttpResponse->setParams($e->getCode(),  'Content-Type: application/json', $e->getMessage());
     if ($HttpResponse->getCode() == null) {
-        $HttpResponse->setParams('500',  'Content-Type: application/json', 'internal unkwnow error : '.$e->getMessage());
+        $HttpResponse->setParams('500',  'Content-Type: application/json', $e->getMessage());
     }
-    echo json_encode($HttpResponse->getHttpResponse());
+}
+finally {
+    header_remove();
+    header($HttpResponse->getHeader());
+    http_response_code($HttpResponse->getCode());
+    if (is_array($HttpResponse->getMessage()))
+        echo json_encode($HttpResponse->getMessage());
+    else {
+        $array['message'] = $HttpResponse->getMessage();
+        echo json_encode($array);
+    }
 }

@@ -8,10 +8,10 @@
 
 class HttpResponseModel
 {
-    private $_code;
-    private $_header;
-    private $_message;
-    private $_HttpResponse;
+    private $_code = 0;
+    private $_header = "";
+    private $_message = null;
+    private $_HttpResponse = null;
 
     /**
      * @return mixed

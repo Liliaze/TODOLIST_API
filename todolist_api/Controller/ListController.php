@@ -41,7 +41,7 @@ class ListController
             $newList = \ListService::getInstance()->createList($data['title'], $userFind->getId());
             if ($newList) {
                 self::$HttpResponse->setParams('201', 'Content-Type: application/json', "new list created");
-                return self::$HttpResponse->getHttpResponse();
+                return self::$HttpResponse;
             }
         }
     }

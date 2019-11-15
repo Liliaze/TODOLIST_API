@@ -34,7 +34,7 @@ class AccountController
             if ($newUser) {
                 $array['auth_token'] = $token = $newUser->getToken();
                 self::$HttpResponse->setParams('201', 'Content-Type: application/json', $array);
-                return self::$HttpResponse->getHttpResponse();
+                return self::$HttpResponse;
             }
         }
         throw new FormatException('username or password not define');
@@ -48,7 +48,7 @@ class AccountController
             if ($token) {
                 $array['auth_token'] = $token;
                 self::$HttpResponse->setParams('200', 'Content-Type: application/json', $array);
-                return self::$HttpResponse->getHttpResponse();
+                return self::$HttpResponse;
             }
         }
         throw new FormatException('bad username or password');
