@@ -5,10 +5,9 @@
  * Date: 12/11/2019
  * Time: 13:24
  */
+require_once './Repository/PdoHelper.php';
 
-require_once './Model/PdoModel.php';
-
-class UserRepository
+class UserRepository extends PdoHelper
 {
     private static $instance = null;
 
@@ -21,7 +20,7 @@ class UserRepository
     }
 
     public function createUser($user) {
-        $request =  \PdoModel::getInstance()->getPdo()->prepare("INSERT INTO `user` (`id`, `username`, `password`, `token`) VALUES (?, ?, ?, ?)");
+        $request =  parent::getPdo()->prepare("INSERT INTO `user` (`id`, `username`, `password`, `token`) VALUES (?, ?, ?, ?)");
         $result = $request->execute(array($user->getId(), $user->getUsername(), $user->getPassword(), $user->getToken()));
         if (!$result)
             throw new Exception('internal server error, user not created');
@@ -30,7 +29,7 @@ class UserRepository
 
     public function getUserByUsername($username)
     {
-        $request = \PdoModel::getInstance()->getPdo()->prepare("SELECT * FROM `user` WHERE `username` LIKE :u ");
+        $request = parent::getPdo()->prepare("SELECT * FROM `user` WHERE `username` LIKE :u ");
         $request->bindParam(':u', $username);
         $request->execute();
         $pdoresults = $request->fetchAll();
@@ -43,7 +42,7 @@ class UserRepository
 
     public function getUserByToken($token)
     {
-        $request = \PdoModel::getInstance()->getPdo()->prepare("SELECT * FROM `user` WHERE `token` LIKE :t ");
+        $request = parent::getPdo()->prepare("SELECT * FROM `user` WHERE `token` LIKE :t ");
         $request->bindParam(':t', $token);
         $request->execute();
         $pdoresults = $request->fetchAll();

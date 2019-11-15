@@ -1,7 +1,7 @@
 <?php
 
 require_once './Router/Router.php';
-require_once "./Model/UserModel.php";
+require_once './Model/UserModel.php';
 require_once './Exception/FormatException.php';
 require_once './Exception/ConflictException.php';
 require_once './Exception/UnauthorizedException.php';

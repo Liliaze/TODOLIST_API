@@ -6,9 +6,9 @@
  * Time: 13:24
  */
 
-require_once './Model/PdoModel.php';
+require_once './Repository/PdoHelper.php';
 
-class ListRepository
+class ListRepository extends PdoHelper
 {
     private static $instance = null;
 
@@ -21,7 +21,7 @@ class ListRepository
     }
 
     public function createList($listModel) {
-        $request =  \PdoModel::getInstance()->getPdo()->prepare("INSERT INTO `list` (`id_list`, `id_user`, `title`) VALUES (?, ?, ?)");
+        $request =  parent::getPdo()->prepare("INSERT INTO `list` (`id_list`, `id_user`, `title`) VALUES (?, ?, ?)");
         $result = $request->execute(array($listModel->getIdList(), $listModel->getIdUser(), $listModel->getTitle()));
         if (!$result)
             throw new Exception('list not created');
@@ -30,7 +30,7 @@ class ListRepository
 /*
     public function getUserByUsername($username)
     {
-        $request = \PdoModel::getInstance()->getPdo()->prepare("SELECT * FROM `user` WHERE `username` LIKE :u ");
+        $request = \PdoHelper::getInstance()->getPdo()->prepare("SELECT * FROM `user` WHERE `username` LIKE :u ");
         $request->bindParam(':u', $username);
         $request->execute();
         $pdoresults = $request->fetchAll();
@@ -43,7 +43,7 @@ class ListRepository
 
     public function getUserByToken($token)
     {
-        $request = \PdoModel::getInstance()->getPdo()->prepare("SELECT * FROM `user` WHERE `token` LIKE :t ");
+        $request = \PdoHelper::getInstance()->getPdo()->prepare("SELECT * FROM `user` WHERE `token` LIKE :t ");
         $request->bindParam(':t', $token);
         $request->execute();
         $pdoresults = $request->fetchAll();

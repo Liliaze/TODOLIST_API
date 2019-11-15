@@ -37,7 +37,7 @@ class AccountController
                 return self::$HttpResponse;
             }
         }
-        throw new FormatException('username or password not define');
+        throw new FormatException('Username or password not define');
     }
 
     public function login($data)
@@ -51,6 +51,6 @@ class AccountController
                 return self::$HttpResponse;
             }
         }
-        throw new FormatException('bad username or password');
+        throw new FormatException('Bad username or password');
     }
 }

@@ -7,9 +7,9 @@
  */
 
 /**
- * Class PdoModel
+ * Class PdoHelper
  */
-class PdoModel
+class PdoHelper
 {
 
     /**
@@ -22,33 +22,14 @@ class PdoModel
     private $_password ='';
     private $_pdo = null;
 
-    /**
-     * @return null|PDO
-     */
-    public function getPdo()
+    protected function getPdo()
     {
-        return $this->_pdo;
-    }
-
-    private static $instance = null;
-
-    public static function getInstance()
-    {
-        if (self::$instance) {
-            return self::$instance;
-        }
-        self::$instance = new PdoModel();
-        return self::$instance;
-    }
-
-    public function __construct() {
-
         try {
             $this->_pdo = new PDO('mysql:host='.$this->_host.';port='.$this->_port.';dbname='.$this->_dbName, $this->_user, $this->_password);
 
         } catch(Exception $e) {
             throw new \Exception();
         }
+        return $this->_pdo;
     }
-
 }
