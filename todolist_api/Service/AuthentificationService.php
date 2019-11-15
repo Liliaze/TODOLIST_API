@@ -26,10 +26,11 @@ class AuthentificationService
         //check the format and availability of datas
         if ($this->checkUsernameFormat($username) && $this->checkPasswordFormat($password) &&
             $this->checkAvailabilityUserName($username)) {
-            echo "pasfluffy";
-            $newUser = new UserModel();
+            $newUser = new ListModel();
             $newUser->setUser(null, $username, $this->encodePassword($password), $this->generateToken());
-            return \UserRepository::getInstance()->createUser($newUser);
+            if (\UserRepository::getInstance()->createUser($newUser)) {
+                return $newUser;
+            };
         }
         throw new Exception('bad format for username or password');
     }
@@ -99,6 +100,14 @@ class AuthentificationService
         $userFind = \UserRepository::getInstance()->getUserByUsername($username);
         if (!$userFind) {
             throw new UnauthorizedException('user not found');
+        }
+        return $userFind;
+    }
+
+    public function getUserByToken($auth_token) {
+        $userFind = \UserRepository::getInstance()->getUserByToken($auth_token);
+        if (!$userFind) {
+            throw new UnauthorizedException('bad_credential, token not recognize');
         }
         return $userFind;
     }

@@ -8,7 +8,7 @@
 
 require_once './Model/PdoModel.php';
 
-class UserRepository
+class ListRepository
 {
     private static $instance = null;
 
@@ -16,18 +16,18 @@ class UserRepository
         if (self::$instance) {
             return self::$instance;
         }
-        self::$instance = new UserRepository();
+        self::$instance = new ListRepository();
         return self::$instance;
     }
 
-    public function createUser($user) {
-        $request =  \PdoModel::getInstance()->getPdo()->prepare("INSERT INTO `user` (`id`, `username`, `password`, `token`) VALUES (?, ?, ?, ?)");
-        $result = $request->execute(array($user->getId(), $user->getUsername(), $user->getPassword(), $user->getToken()));
+    public function createList($listModel) {
+        $request =  \PdoModel::getInstance()->getPdo()->prepare("INSERT INTO `list` (`id_list`, `id_user`, `title`) VALUES (?, ?, ?)");
+        $result = $request->execute(array($listModel->getIdList(), $listModel->getIdUser(), $listModel->getTitle()));
         if (!$result)
-            throw new Exception('internal server error, user not created');
+            throw new Exception('list not created');
         return $result;
     }
-
+/*
     public function getUserByUsername($username)
     {
         $request = \PdoModel::getInstance()->getPdo()->prepare("SELECT * FROM `user` WHERE `username` LIKE :u ");
@@ -48,7 +48,7 @@ class UserRepository
         $request->execute();
         $pdoresults = $request->fetchAll();
 
-        $user = new UserModel();
+        $user = new ListModel();
         if ($pdoresults != null && isset($pdoresults[0])) {
             $user->setUserByRequest($pdoresults[0]);
             return $user;
@@ -56,4 +56,5 @@ class UserRepository
         else
             return null;
     }
+*/
 }

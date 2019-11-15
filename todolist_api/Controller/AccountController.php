@@ -30,9 +30,11 @@ class AccountController
     {
         if (isset($data['username']) && isset($data['password']))
         {
-            $isUserCreated = \AuthentificationService::getInstance()->createUser($data['username'], $data['password']);
-            if ($isUserCreated) {
-                self::$HttpResponse->setParams('201', 'Content-Type: application/json', 'user ' . $data['username'] . ' created.');
+            $newUser = \AuthentificationService::getInstance()->createUser($data['username'], $data['password']);
+            if ($newUser) {
+                $array['auth_token'] = $token = $newUser->getToken();
+                self::$HttpResponse->setParams('201', 'Content-Type: application/json', $array);
+                return self::$HttpResponse->getHttpResponse();
             }
         }
         throw new FormatException('username or password not define');
@@ -44,7 +46,7 @@ class AccountController
         {
             $token = \AuthentificationService::getInstance()->login($data['username'], $data['password']);
             if ($token) {
-                $array['token'] = $token;
+                $array['auth_token'] = $token;
                 self::$HttpResponse->setParams('200', 'Content-Type: application/json', $array);
                 return self::$HttpResponse->getHttpResponse();
             }

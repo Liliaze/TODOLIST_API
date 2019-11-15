@@ -7,6 +7,7 @@
  */
 
 require './Controller/AccountController.php';
+require_once "./Controller/ListController.php";
 require './Exception/RouterException.php';
 
 class Router
@@ -56,8 +57,12 @@ class Router
         //POST /api/user
         if ($argumentCount == 2 && $urlParameterArray[1] == "user")
             return \AccountController::getInstance()->signup($parameterData);
-        else
-            throw new RouterException('no routes matches');
+        else if ($argumentCount == 4 && $urlParameterArray[1] == "user" &&
+            ctype_digit($urlParameterArray[2]) && $urlParameterArray[3] == "list")
+            return ListController::getInstance()->addList($headerData, $parameterData);
+        else if ($argumentCount == 2 && $urlParameterArray[1] == "list")
+            return ListController::getInstance()->addList($headerData, $parameterData);
+        throw new RouterException('no routes matches');
     }
 
     private function deleteRoutes($urlParameterArray, $argumentCount, $headerData, $parameterData)
