@@ -28,15 +28,32 @@ class UserRepository
         return $result;
     }
 
-    public function getUserByUsername($username) {
-        $request =  \PdoModel::getInstance()->getPdo()->prepare("SELECT * FROM `user` WHERE `username` LIKE :u ");
-        $request->bindParam(':u',$username);
+    public function getUserByUsername($username)
+    {
+        $request = \PdoModel::getInstance()->getPdo()->prepare("SELECT * FROM `user` WHERE `username` LIKE :u ");
+        $request->bindParam(':u', $username);
+        $request->execute();
+        $pdoresults = $request->fetchAll();
+        $user = new UserModel();
+        if ($pdoresults != null && isset($pdoresults[0])) {
+            $user->setUserByRequest($pdoresults[0]);
+        }
+        return $user;
+    }
+
+    public function getUserByToken($token)
+    {
+        $request = \PdoModel::getInstance()->getPdo()->prepare("SELECT * FROM `user` WHERE `token` LIKE :t ");
+        $request->bindParam(':t', $token);
         $request->execute();
         $pdoresults = $request->fetchAll();
 
-        $userTest = new UserModel();
-        if  ($pdoresults != null && isset($pdoresults[0]))
-            $userTest->setUserByRequest($pdoresults[0]);
-        return $userTest;
+        $user = new UserModel();
+        if ($pdoresults != null && isset($pdoresults[0])) {
+            $user->setUserByRequest($pdoresults[0]);
+            return $user;
+        }
+        else
+            return null;
     }
 }

@@ -9,45 +9,46 @@
 
 require_once './Service/AuthentificationService.php';
 require_once './Model/HttpResponseModel.php';
-require_once "./Exception/FormatException.php";
-require_once "./Exception/ConflictException.php";
+
 
 class AccountController
 {
 
     private static $instance = null;
+    private static $HttpResponse;
 
     public static function getInstance() {
         if (self::$instance) {
             return self::$instance;
         }
         self::$instance = new AccountController();
+        self::$HttpResponse = new HttpResponseModel();
         return self::$instance;
     }
 
-    public function signup($data) {
-        $HttpResponse = new HttpResponseModel();
-        try {
-            if (isset($data['userName']) && isset($data['password'])) {
-                $isUserCreated = \AuthentificationService::getInstance()->createUser($data['userName'], $data['password']);
-                if ($isUserCreated) {
-                    $HttpResponse->setParams('201', 'Content-Type: application/json', 'user '.$data['userName'].' created.');
-                } else
-                    $HttpResponse->setParams('500', 'Content-Type: application/json', 'internal server unknow error');
+    public function signup($data)
+    {
+        if (isset($data['username']) && isset($data['password']))
+        {
+            $isUserCreated = \AuthentificationService::getInstance()->createUser($data['username'], $data['password']);
+            if ($isUserCreated) {
+                self::$HttpResponse->setParams('201', 'Content-Type: application/json', 'user ' . $data['username'] . ' created.');
             }
         }
-        catch (ConflictException $e){
-            $HttpResponse->setParams('409',  'Content-Type: application/json', 'Conflict : '.$e->getMessage());
-        } catch (FormatException $e){
-            $HttpResponse->setParams('400',  'Content-Type: application/json', 'Bad request : '.$e->getMessage());
-        } finally {
-            return $HttpResponse->getHttpResponse();
-        }
+        throw new FormatException('username or password not define');
     }
 
-    public function login($data) {
-        if (isset($data['userName']) && isset($data['password'])) //check username validity
-            return \AuthentificationService::getInstance()->createUser($data['userName'], $data['password']);
-        return "fail";
+    public function login($data)
+    {
+        if (isset($data['username']) && isset($data['password']))
+        {
+            $token = \AuthentificationService::getInstance()->login($data['username'], $data['password']);
+            if ($token) {
+                $array['token'] = $token;
+                self::$HttpResponse->setParams('200', 'Content-Type: application/json', $array);
+                return self::$HttpResponse->getHttpResponse();
+            }
+        }
+        throw new FormatException('bad username or password');
     }
 }

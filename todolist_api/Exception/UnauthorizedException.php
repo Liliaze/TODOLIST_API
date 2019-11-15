@@ -7,11 +7,11 @@
  */
 
 
-class FormatException extends \Exception
+class UnauthorizedException extends \Exception
 {
     public function __construct($message = "", $code = 0, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
-        $this->code = 409;
+        $this->code = 401;
     }
 }

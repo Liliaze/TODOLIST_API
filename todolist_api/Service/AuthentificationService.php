@@ -26,6 +26,7 @@ class AuthentificationService
         //check the format and availability of datas
         if ($this->checkUsernameFormat($username) && $this->checkPasswordFormat($password) &&
             $this->checkAvailabilityUserName($username)) {
+            echo "pasfluffy";
             $newUser = new UserModel();
             $newUser->setUser(null, $username, $this->encodePassword($password), $this->generateToken());
             return \UserRepository::getInstance()->createUser($newUser);
@@ -33,7 +34,26 @@ class AuthentificationService
         throw new Exception('bad format for username or password');
     }
 
+    //function login($username, $password): Success(user->auth_token) |
+    // Error(invalid_credentials) $user = UserRepository->getInstance()->getUserByUsername($username);
+    // if ($user->getPassword() === $password) ..
+    public function login($username, $password)
+    {
+        //check the format of datas
+        if ($this->checkUsernameFormat($username) && $this->checkPasswordFormat($password))
+        {
+            $userFind = $this->getUserByUsername($username);
+            //check user data with data in database
+            if ($userFind->getUsername() == $username && $userFind->getPassword() === $this->encodePassword($password)) {
+                //return token
+                return $userFind->getToken();
+            }
+        }
+        throw new UnauthorizedException('invalid_credentials');
+    }
+
     private function checkUserNameFormat($username) {
+
         if (empty($username) || $username == ""){
             throw new FormatException('Username not should be empty');
         }
@@ -65,12 +85,22 @@ class AuthentificationService
 
     private function checkAvailabilityUserName($username)
     {
-        $userFindName = \UserRepository::getInstance()->getUserByUsername($username)->getUserName();
-
+        $userFindName = null;
+        $userFind = $this->getUserByUsername($username);
+        if ($userFind)
+            $userFindName = $userFind->getUsername();
         if ($userFindName == $username) {
             throw new ConflictException('This username is already used ! Please login or choose another');
         }
         return true;
+    }
+
+    private function getUserByUsername($username) {
+        $userFind = \UserRepository::getInstance()->getUserByUsername($username);
+        if (!$userFind) {
+            throw new UnauthorizedException('user not found');
+        }
+        return $userFind;
     }
 
     private function encodePassword($password) {
@@ -78,10 +108,27 @@ class AuthentificationService
         return $encodePassword;
     }
 
-
     private function generateToken()
     {
-        //to do creation of token
-        return ("abcd1234-*/");
+        return ($this->Salt());
+    }
+
+    private function Salt(){
+        return substr(strtr(base64_encode(hex2bin($this->RandomToken(32))), '+', '.'), 0, 44);
+    }
+
+    private function RandomToken($length = 32){
+        if(!isset($length) || intval($length) <= 8 ){
+            $length = 32;
+        }
+        if (function_exists('random_bytes')) {
+            return bin2hex(random_bytes($length));
+        }
+        if (function_exists('mcrypt_create_iv')) {
+            return bin2hex(mcrypt_create_iv($length, MCRYPT_DEV_URANDOM));
+        }
+        if (function_exists('openssl_random_pseudo_bytes')) {
+            return bin2hex(openssl_random_pseudo_bytes($length));
+        }
     }
 }
