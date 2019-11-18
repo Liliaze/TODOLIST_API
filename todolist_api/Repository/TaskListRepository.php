@@ -21,12 +21,31 @@ class TaskListRepository extends PdoHelper
         return self::$instance;
     }
 
-    public function createTaskList($listModel) {
+    public function createTaskList($taskListModel) {
         $request =  parent::getPdo()->prepare("INSERT INTO tasklist (`id_tasklist`, `id_user`, `title`) VALUES (?, ?, ?)");
-        $result = $request->execute(array($listModel->getIdTaskList(), $listModel->getIdUser(), $listModel->getTitle()));
+        $result = $request->execute(array($taskListModel->getIdTaskList(), $taskListModel->getIdUser(), $taskListModel->getTitle()));
         if (!$result)
-            throw new Exception('list not created');
+            throw new Exception('taskList not created');
         return $result;
+    }
+
+    public function updateTaskList($taskListId, $title) {
+        $request =  parent::getPdo()->prepare("UPDATE `tasklist` SET `title` = :t WHERE `tasklist`.`id_tasklist` = :id");
+        $request->bindParam(":t",$title);
+        $request->bindParam(":id",$taskListId);
+        $pdoresults = $request->execute();
+        if (!$pdoresults)
+            throw new Exception('taskList not updated');
+        return $pdoresults;
+    }
+
+    public function deleteTaskList($taskListId) {
+        $request =  parent::getPdo()->prepare("DELETE FROM `tasklist` WHERE `tasklist`.`id_tasklist` = :id");
+        $request->bindParam(":id",$taskListId);
+        $pdoresults = $request->execute();
+        if (!$pdoresults)
+            throw new Exception('taskList not deleted');
+        return $pdoresults;
     }
 
     public function getTaskList($userId) {
@@ -42,6 +61,7 @@ class TaskListRepository extends PdoHelper
         }
         return $taskListArray;
     }
+
     public function getTaskListById($taskListId, $userId) {
         $request =  parent::getPdo()->prepare("SELECT * FROM `tasklist` WHERE `id_tasklist` LIKE :t AND `id_user` LIKE :u ");
         $request->bindParam(":t",$taskListId);
@@ -54,34 +74,5 @@ class TaskListRepository extends PdoHelper
         }
         return $newTaskList;
     }
-/*
-    public function getUserByUsername($username)
-    {
-        $request = \PdoHelper::getInstance()->getPdo()->prepare("SELECT * FROM `user` WHERE `username` LIKE :u ");
-        $request->bindParam(':u', $username);
-        $request->execute();
-        $pdoresults = $request->fetchAll();
-        $user = new TaskListModel();
-        if ($pdoresults != null && isset($pdoresults[0])) {
-            $user->setUserByRequest($pdoresults[0]);
-        }
-        return $user;
-    }
 
-    public function getUserByToken($token)
-    {
-        $request = \PdoHelper::getInstance()->getPdo()->prepare("SELECT * FROM `user` WHERE `token` LIKE :t ");
-        $request->bindParam(':t', $token);
-        $request->execute();
-        $pdoresults = $request->fetchAll();
-
-        $user = new TaskListModel();
-        if ($pdoresults != null && isset($pdoresults[0])) {
-            $user->setUserByRequest($pdoresults[0]);
-            return $user;
-        }
-        else
-            return null;
-    }
-*/
 }

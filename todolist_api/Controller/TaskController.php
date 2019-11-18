@@ -39,9 +39,32 @@ class TaskController
         }
         $userFind = $this->checkUserAuthentification($header);
 
-        $newTaskList = \TaskListService::getInstance()->createTaskList($data['title'], $userFind->getId());
-        if ($newTaskList) {
+        $isCreate = \TaskListService::getInstance()->createTaskList($data['title'], $userFind->getId());
+        if ($isCreate) {
             self::$HttpResponse->setParams('201', 'Content-Type: application/json', "new list created");
+            return self::$HttpResponse;
+        }
+    }
+
+    public function updateTaskList($header, $taskListId, $data) {
+        if (!isset($data['title'])) {
+            throw new FormatException('new title of list not define in parameter');
+        }
+        $userFind = $this->checkUserAuthentification($header);
+
+        $isUpdate = \TaskListService::getInstance()->updateTaskList($taskListId, $userFind->getId(), $data['title']);
+        if ($isUpdate) {
+            self::$HttpResponse->setParams('200', 'Content-Type: application/json', "taskList n°".$taskListId." has been updated");
+            return self::$HttpResponse;
+        }
+    }
+
+    public function deleteTaskList($header, $taskListId) {
+        $userFind = $this->checkUserAuthentification($header);
+
+        $isDelete = \TaskListService::getInstance()->deleteTaskList($taskListId, $userFind->getId());
+        if ($isDelete) {
+            self::$HttpResponse->setParams('200', 'Content-Type: application/json', "taskList n°".$taskListId." has been deleted");
             return self::$HttpResponse;
         }
     }

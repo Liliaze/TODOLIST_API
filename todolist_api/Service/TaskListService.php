@@ -21,21 +21,45 @@ class TaskListService
         return self::$instance;
     }
 
-    public function createTaskList($title, $user_id)
+    public function createTaskList($title, $userId)
     {
         //check format of data
         if ($this->checkDataFormat($title))
         {
             //create a TaskListModel
-            $newList = new TaskListModel();
-            $newList->setTaskList(0, $user_id, $title);
+            $newTaskList = new TaskListModel();
+            $newTaskList->setTaskList(0, $userId, $title);
             //Send List in database
-            if ($newListDB = \TaskListRepository::getInstance()->createTaskList($newList)) {
+            if ($newListDB = \TaskListRepository::getInstance()->createTaskList($newTaskList)) {
                 return $newListDB;
             };
         }
         throw new Exception('user not created');
 
+    }
+
+    public function updateTaskList($taskListId, $userId, $title)
+    {
+        $this->checkUserRight($taskListId,  $userId);
+        //check format of data
+        if ($this->checkDataFormat($title))
+        {
+            //Send List in database to update
+            if ($updatedListDB = \TaskListRepository::getInstance()->updateTaskList($taskListId, $title)) {
+                return $updatedListDB;
+            };
+        }
+        throw new Exception('taskList not updated');
+    }
+
+    public function deleteTaskList($taskListId, $userId)
+    {
+        $this->checkUserRight($taskListId,  $userId);
+        //Send List in database to update
+        if ($deletedListDB = \TaskListRepository::getInstance()->deleteTaskList($taskListId)) {
+            return $deletedListDB;
+        };
+        throw new Exception('taskList not deleted');
     }
 
     public function getTaskLists($userId) {
@@ -49,6 +73,8 @@ class TaskListService
         $taskList = \TaskListRepository::getInstance()->getTaskListById($taskListId, $userId);
         if (!$taskList)
             throw new FormatException("taskList n°".$taskListId." not found");
+        if ($taskList->getIdUser() != $userId)
+            throw new UnauthorizedException("invalid_rights on ressources");
         return $taskList;
     }
 
@@ -65,4 +91,13 @@ class TaskListService
         }
         return true;
     }
+
+    private function checkUserRight($taskListId, $userId) {
+        $taskListInDB = $this->getTaskListById($taskListId, $userId);
+        if ($taskListInDB){
+            return true;
+        }
+        return false;
+    }
+
 }
