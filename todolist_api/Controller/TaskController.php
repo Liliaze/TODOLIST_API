@@ -61,6 +61,7 @@ class TaskController
 
         $taskList = \TaskListService::getInstance()->getTaskListById($taskListId, $userFind->getId());
         if ($taskList) {
+            $taskList;
             self::$HttpResponse->setParams('200', 'Content-Type: application/json', $taskList);
             return self::$HttpResponse;
         }

@@ -7,6 +7,7 @@
  */
 
 require_once './Repository/PdoHelper.php';
+require_once './Model/TaskListModel.php';
 
 class TaskListRepository extends PdoHelper
 {
@@ -33,7 +34,13 @@ class TaskListRepository extends PdoHelper
         $request->bindParam(":u",$userId);
         $request->execute();
         $pdoresults = $request->fetchAll();
-        return $pdoresults;
+        $taskListArray = [];
+        foreach ($pdoresults as $key => $taskList) {
+            $newTaskList = new TaskListModel();
+            $newTaskList->setTaskListByRequest($taskList);
+            $taskListArray[$key] = $newTaskList;
+        }
+        return $taskListArray;
     }
     public function getTaskListById($taskListId, $userId) {
         $request =  parent::getPdo()->prepare("SELECT * FROM `tasklist` WHERE `id_tasklist` LIKE :t AND `id_user` LIKE :u ");
@@ -41,7 +48,11 @@ class TaskListRepository extends PdoHelper
         $request->bindParam(":u",$userId);
         $request->execute();
         $pdoresults = $request->fetchAll();
-        return $pdoresults;
+        $newTaskList = new TaskListModel();
+        if ($pdoresults != null && isset($pdoresults[0])) {
+            $newTaskList->setTaskListByRequest($pdoresults[0]);
+        }
+        return $newTaskList;
     }
 /*
     public function getUserByUsername($username)

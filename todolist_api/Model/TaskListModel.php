@@ -12,14 +12,14 @@
 class TaskListModel
 {
 
-    private $id_user = 0;
-    private $id_tasklist = 0;
-    private $title = null;
+    public $id_user = 0;
+    public $id_tasklist = 0;
+    public $title = null;
 
     public function setTaskListByRequest($pdoResults)
     {
         $this->setIdUser($pdoResults['id_user']);
-        $this->setIdTasklist($pdoResults['id_list']);
+        $this->setIdTasklist($pdoResults['id_tasklist']);
         $this->setTitle($pdoResults['title']);
     }
 

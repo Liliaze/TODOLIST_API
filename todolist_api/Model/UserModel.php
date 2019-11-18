@@ -12,10 +12,10 @@
 class UserModel
 {
 
-    private $id = 0;
-    private $username = null;
-    private $password = null;
-    private $token = null;
+    public $id = 0;
+    public $username = null;
+    public $password = null;
+    public $token = null;
 
     /**
      * @param $username

@@ -32,7 +32,7 @@ class AccountController
         {
             $newUser = \AuthentificationService::getInstance()->createUser($data['username'], $data['password']);
             if ($newUser) {
-                $array['auth_token'] = $token = $newUser->getToken();
+                $array['auth_token'] = $newUser->getToken();
                 self::$HttpResponse->setParams('201', 'Content-Type: application/json', $array);
                 return self::$HttpResponse;
             }
