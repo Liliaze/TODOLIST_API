@@ -26,7 +26,7 @@ class AuthentificationService
         //check the format and availability of datas
         if ($this->checkUsernameFormat($username) && $this->checkPasswordFormat($password) &&
             $this->checkAvailabilityUserName($username)) {
-            $newUser = new ListModel();
+            $newUser = new UserModel();
             $newUser->setUser(null, $username, $this->encodePassword($password), $this->generateToken());
             if (\UserRepository::getInstance()->createUser($newUser)) {
                 return $newUser;

@@ -9,24 +9,24 @@
 /**
  * Class UserModel
  */
-class ListModel
+class TaskListModel
 {
 
     private $id_user = 0;
-    private $id_list = 0;
+    private $id_tasklist = 0;
     private $title = null;
 
-    public function setListByRequest($pdoResults)
+    public function setTaskListByRequest($pdoResults)
     {
         $this->setIdUser($pdoResults['id_user']);
-        $this->setIdList($pdoResults['id_list']);
+        $this->setIdTasklist($pdoResults['id_list']);
         $this->setTitle($pdoResults['title']);
     }
 
-    public function setList($id_list, $id_user, $title)
+    public function setTaskList($id_list, $id_user, $title)
     {
         $this->setIdUser($id_user);
-        $this->setIdList($id_list);
+        $this->setIdTasklist($id_list);
         $this->setTitle($title);
     }
 
@@ -49,17 +49,17 @@ class ListModel
     /**
      * @return int
      */
-    public function getIdList()
+    public function getIdTasklist()
     {
-        return $this->id_list;
+        return $this->id_tasklist;
     }
 
     /**
-     * @param int $id_list
+     * @param int $id_tasklist
      */
-    public function setIdList($id_list)
+    public function setIdTasklist($id_tasklist)
     {
-        $this->id_list = $id_list;
+        $this->id_tasklist = $id_tasklist;
     }
 
     /**

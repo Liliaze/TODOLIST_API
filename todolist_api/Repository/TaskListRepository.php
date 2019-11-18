@@ -8,7 +8,7 @@
 
 require_once './Repository/PdoHelper.php';
 
-class ListRepository extends PdoHelper
+class TaskListRepository extends PdoHelper
 {
     private static $instance = null;
 
@@ -16,16 +16,32 @@ class ListRepository extends PdoHelper
         if (self::$instance) {
             return self::$instance;
         }
-        self::$instance = new ListRepository();
+        self::$instance = new TaskListRepository();
         return self::$instance;
     }
 
-    public function createList($listModel) {
-        $request =  parent::getPdo()->prepare("INSERT INTO `list` (`id_list`, `id_user`, `title`) VALUES (?, ?, ?)");
-        $result = $request->execute(array($listModel->getIdList(), $listModel->getIdUser(), $listModel->getTitle()));
+    public function createTaskList($listModel) {
+        $request =  parent::getPdo()->prepare("INSERT INTO tasklist (`id_tasklist`, `id_user`, `title`) VALUES (?, ?, ?)");
+        $result = $request->execute(array($listModel->getIdTaskList(), $listModel->getIdUser(), $listModel->getTitle()));
         if (!$result)
             throw new Exception('list not created');
         return $result;
+    }
+
+    public function getTaskList($userId) {
+        $request =  parent::getPdo()->prepare("SELECT * FROM `tasklist` WHERE id_user LIKE :u");
+        $request->bindParam(":u",$userId);
+        $request->execute();
+        $pdoresults = $request->fetchAll();
+        return $pdoresults;
+    }
+    public function getTaskListById($taskListId, $userId) {
+        $request =  parent::getPdo()->prepare("SELECT * FROM `tasklist` WHERE `id_tasklist` LIKE :t AND `id_user` LIKE :u ");
+        $request->bindParam(":t",$taskListId);
+        $request->bindParam(":u",$userId);
+        $request->execute();
+        $pdoresults = $request->fetchAll();
+        return $pdoresults;
     }
 /*
     public function getUserByUsername($username)
@@ -34,7 +50,7 @@ class ListRepository extends PdoHelper
         $request->bindParam(':u', $username);
         $request->execute();
         $pdoresults = $request->fetchAll();
-        $user = new ListModel();
+        $user = new TaskListModel();
         if ($pdoresults != null && isset($pdoresults[0])) {
             $user->setUserByRequest($pdoresults[0]);
         }
@@ -48,7 +64,7 @@ class ListRepository extends PdoHelper
         $request->execute();
         $pdoresults = $request->fetchAll();
 
-        $user = new ListModel();
+        $user = new TaskListModel();
         if ($pdoresults != null && isset($pdoresults[0])) {
             $user->setUserByRequest($pdoresults[0]);
             return $user;

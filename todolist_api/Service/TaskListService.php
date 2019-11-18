@@ -6,9 +6,9 @@
  * Time: 13:25
  */
 
-require_once "./Repository/ListRepository.php";
+require_once "./Repository/TaskListRepository.php";
 
-class ListService
+class TaskListService
 {
     private static $instance = null;
 
@@ -17,25 +17,39 @@ class ListService
         if (self::$instance) {
             return self::$instance;
         }
-        self::$instance = new ListService();
+        self::$instance = new TaskListService();
         return self::$instance;
     }
 
-    public function createList($title, $user_id)
+    public function createTaskList($title, $user_id)
     {
         //check format of data
         if ($this->checkDataFormat($title))
         {
-            //create a ListModel
-            $newList = new ListModel();
-            $newList->setList(0, $user_id, $title);
+            //create a TaskListModel
+            $newList = new TaskListModel();
+            $newList->setTaskList(0, $user_id, $title);
             //Send List in database
-            if ($newListDB = \ListRepository::getInstance()->createList($newList)) {
+            if ($newListDB = \TaskListRepository::getInstance()->createTaskList($newList)) {
                 return $newListDB;
             };
         }
         throw new Exception('user not created');
 
+    }
+
+    public function getTaskLists($userId) {
+        $taskList = \TaskListRepository::getInstance()->getTaskList($userId);
+        if (!$taskList)
+            throw new FormatException("taskLists not found");
+        return $taskList;
+    }
+
+    public function getTaskListById($taskListId, $userId) {
+        $taskList = \TaskListRepository::getInstance()->getTaskListById($taskListId, $userId);
+        if (!$taskList)
+            throw new FormatException("taskList n°".$taskListId." not found");
+        return $taskList;
     }
 
     private function checkDataFormat($data) {
