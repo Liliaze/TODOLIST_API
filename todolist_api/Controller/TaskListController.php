@@ -94,6 +94,14 @@ class TaskListController
         return new HttpResponseModel('200', 'Content-Type: application/json', "taskList n°".$taskListId." has been deleted");
     }
 
+    public function deleteTask($header, $taskId) {
+        $userFind = \AuthentificationService::getInstance()->checkUserAuthentification($header);
+
+        \TaskListService::getInstance()->deleteTask($taskId, $userFind->getUserId());
+
+        return new HttpResponseModel('200', 'Content-Type: application/json', "taskList n°".$taskId." has been deleted");
+    }
+
     public function getUserTaskLists($header) {
         $userFind = \AuthentificationService::getInstance()->checkUserAuthentification($header);
 

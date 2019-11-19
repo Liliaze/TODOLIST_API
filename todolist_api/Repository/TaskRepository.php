@@ -68,16 +68,14 @@ class TaskRepository extends PdoHelper
         $success = $request->execute(array($taskModel->getIdTaskList(), $taskModel->getContent(),$taskModel->getStatus(), $taskModel->getIdTask()));
         return $success;
     }
-/*
-    public function deleteTaskList($taskListId) {
-        $request =  parent::getPdo()->prepare("DELETE FROM `tasklist` WHERE `tasklist`.`id_tasklist` = :id");
-        $request->bindParam(":id",$taskListId);
-        $pdoresults = $request->execute();
-        if (!$pdoresults)
-            throw new Exception('taskList not deleted');
-        return $pdoresults;
-    }
 
+    public function deleteTask($taskId) {
+        $request =  parent::getPdo()->prepare("DELETE FROM `task` WHERE `task`.`id_task` = :id");
+        $request->bindParam(":id",$taskId);
+        $success = $request->execute();
+        return $success;
+    }
+/*
     public function getTaskList($userId) {
         $request =  parent::getPdo()->prepare("SELECT * FROM `tasklist` WHERE id_user LIKE :u");
         $request->bindParam(":u",$userId);

@@ -106,11 +106,21 @@ class TaskListService
     public function deleteTaskList($taskListId, $userId)
     {
         $this->checkUserRightOnTaskList($taskListId,  $userId);
-        //Send List in database to update
+
         if ($deletedListDB = \TaskListRepository::getInstance()->deleteTaskList($taskListId)) {
             return $deletedListDB;
         };
         throw new UnknownException('TaskList not deleted');
+    }
+
+    public function deleteTask($taskId, $userId)
+    {
+        $this->checkUserRightOnTask($taskId,  $userId);
+
+        if ($success = \TaskRepository::getInstance()->deleteTask($taskId)) {
+            return $success;
+        };
+        throw new UnknownException('Task not deleted');
     }
 
     public function getTaskLists($userId) {

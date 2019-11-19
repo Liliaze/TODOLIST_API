@@ -24,15 +24,7 @@ class Router
         $this->_argcUrl = 0;
         $this->_method = '';
     }
-    /*
 
-
-
-
-
-
-        'DELETE' /api/task/{taskId} => TaskListController->getInstance()->deleteTask(); $request.header: { authToken }
-    */
     private function getRoutes($urlParameterArray, $argumentCount, $headerData, $parameterData) {
 
         //GET' /api/authToken => AccountController->getInstance()->login(); $request.header: { username, password }
@@ -77,6 +69,9 @@ class Router
         //'DELETE' /api/taskList/{taskListId} => TaskListController->getInstance()->deleteTaskList(); $request.header: { authToken }
         if ($argumentCount == 3 && $urlParameterArray[1] == "taskList" && ctype_digit($urlParameterArray[2]))
             return TaskListController::getInstance()->deleteTaskList($headerData, $urlParameterArray[2]);
+        //'DELETE' /api/task/{taskId} => TaskListController->getInstance()->deleteTask(); $request.header: { authToken }
+        else if ($argumentCount == 3 && $urlParameterArray[1] == "task" && ctype_digit($urlParameterArray[2]))
+            return TaskListController::getInstance()->deleteTask($headerData, $urlParameterArray[2]);
         else
             throw new RouterException('No routes matches');
     }
