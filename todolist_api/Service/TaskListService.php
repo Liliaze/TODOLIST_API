@@ -86,10 +86,6 @@ class TaskListService
             if(!$this->checkValidStatus($data['status'])) {
                 throw new FormatException('Status not valid');
             }
-            if ($data['status'] == "deleted") {
-                //to do deleted task;
-                throw new FormatException('deleted status is not implemented');
-            }
             $taskInDBToUpdate->setStatus($data['status']);
         }
         if (isset($data['content'])) {
@@ -195,9 +191,6 @@ class TaskListService
     private function checkValidStatus($status) {
         switch ($status) {
             case "active" :
-                return true;
-                break;
-            case "deleted" :
                 return true;
                 break;
             case "done":
