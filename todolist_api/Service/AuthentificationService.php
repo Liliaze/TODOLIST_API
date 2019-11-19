@@ -104,11 +104,11 @@ class AuthentificationService
         return $userFind;
     }
 
-    public function checkUserAuthentification( $token) {
-        if (!isset($token)) {
+    public function checkUserAuthentification($header) {
+        if (!isset($header['auth_token'])) {
             throw new UnauthorizedException('auth_token not define in header');
         }
-        $userFind = $this->getUserByToken($token);
+        $userFind = $this->getUserByToken($header['auth_token']);
         if (!$userFind)
             throw new UnauthorizedException('498 - invalid auth_token');
         return $userFind;

@@ -20,7 +20,7 @@ class UserRepository extends PdoHelper
     }
 
     public function createUser($user) {
-        $request =  parent::getPdo()->prepare("INSERT INTO `user` (`id`, `username`, `password`, `token`) VALUES (?, ?, ?, ?)");
+        $request =  parent::getPdo()->prepare("INSERT INTO `user` (`id_user`, `username`, `password`, `token`) VALUES (?, ?, ?, ?)");
         $result = $request->execute(array($user->getId(), $user->getUsername(), $user->getPassword(), $user->getToken()));
         if (!$result)
             throw new Exception('internal server error, user not created');

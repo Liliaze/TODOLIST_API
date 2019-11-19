@@ -5,6 +5,7 @@ require_once './Model/UserModel.php';
 require_once './Exception/FormatException.php';
 require_once './Exception/ConflictException.php';
 require_once './Exception/UnauthorizedException.php';
+require_once './Exception/UnknownException.php';
 
 $HttpResponse = null;
 

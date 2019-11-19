@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Created by PhpStorm.
  * User: Liliaze
@@ -8,9 +7,9 @@
  */
 
 
-class RouterException extends \Exception
+class UnknownException extends \Exception
 {
-    private $HttpCode = 501;
+    private $HttpCode = 520;
 
     public function __construct($message = "", $code = 0, Throwable $previous = null)
     {

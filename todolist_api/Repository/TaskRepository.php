@@ -7,9 +7,9 @@
  */
 
 require_once './Repository/PdoHelper.php';
-require_once './Model/TaskListModel.php';
+require_once './Model/TaskModel.php';
 
-class TaskListRepository extends PdoHelper
+class TaskRepository extends PdoHelper
 {
     private static $instance = null;
 
@@ -17,18 +17,34 @@ class TaskListRepository extends PdoHelper
         if (self::$instance) {
             return self::$instance;
         }
-        self::$instance = new TaskListRepository();
+        self::$instance = new TaskRepository();
         return self::$instance;
     }
 
-    public function createTaskList($taskListModel) {
-        $request =  parent::getPdo()->prepare("INSERT INTO tasklist (`id_tasklist`, `id_user`, `title`) VALUES (?, ?, ?)");
-        $result = $request->execute(array($taskListModel->getIdTaskList(), $taskListModel->getIdUser(), $taskListModel->getTitle()));
+    public function createTask($taskModel) {
+        $request =  parent::getPdo()->prepare("INSERT INTO task (id_task, id_tasklist, id_user, content, status, created,updated) VALUES (null, ?, ?, ?, ?, NOW(), NOW())");
+        $result = $request->execute(array($taskModel->getIdTaskList(), $taskModel->getIdUser(), $taskModel->getContent(), $taskModel->getStatus()));
         if (!$result)
-            throw new Exception('taskList not created');
+            throw new UnknownException('taskList not created');
         return $result;
     }
 
+    public function getAllTasksInList($taskListId) {
+        $request =  parent::getPdo()->prepare("SELECT * FROM `task` WHERE id_tasklist LIKE :id");
+        $request->bindParam(":id",$taskListId);
+        $success = $request->execute();
+        if (!$success)
+            return $success;
+        $pdoresults = $request->fetchAll();
+        $taskArray = [];
+        foreach ($pdoresults as $key => $task) {
+            $newTask = new TaskModel();
+            $newTask->unserialize($task);
+            $taskArray[$key] = $newTask->serialize();
+        }
+        return $taskArray;
+    }
+/*
     public function updateTaskList($taskListId, $title) {
         $request =  parent::getPdo()->prepare("UPDATE `tasklist` SET `title` = :t WHERE `tasklist`.`id_tasklist` = :id");
         $request->bindParam(":t",$title);
@@ -57,7 +73,7 @@ class TaskListRepository extends PdoHelper
         foreach ($pdoresults as $key => $taskList) {
             $newTaskList = new TaskListModel();
             $newTaskList->setTaskListByRequest($taskList);
-            $taskListArray[$key] = $newTaskList->serialize();
+            $taskListArray[$key] = $newTaskList;
         }
         return $taskListArray;
     }
@@ -73,5 +89,5 @@ class TaskListRepository extends PdoHelper
         }
         return $newTaskList;
     }
-
+*/
 }

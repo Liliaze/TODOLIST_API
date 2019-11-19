@@ -26,7 +26,7 @@ class UserModel
         );
     }
     public function unserialize($pdoResults) {
-        $this->setUserId($pdoResults['id']);
+        $this->setUserId($pdoResults['id_user']);
         $this->setUsername($pdoResults['username']);
         $this->setPassword($pdoResults['password']);
         $this->setToken($pdoResults['token']);
@@ -38,7 +38,7 @@ class UserModel
 
     public function setUserByRequest($pdoResults)
     {
-        $this->setUserId($pdoResults['id']);
+        $this->setUserId($pdoResults['id_user']);
         $this->setUsername($pdoResults['username']);
         $this->setPassword($pdoResults['password']);
         $this->setToken($pdoResults['token']);
