@@ -149,11 +149,11 @@ class TaskListService
         $this->checkUserRightOnTaskList($taskListId,  $userId);
 
         //get all tasks in this listId
-        $taskFinded = \TaskRepository::getInstance()->getAllTasksInList($taskListId);
+        $taskFounded = \TaskRepository::getInstance()->getAllTasksInList($taskListId);
 
         //return tasks
-        if (is_array($taskFinded)) {
-            return $taskFinded;
+        if (is_array($taskFounded)) {
+            return $taskFounded;
         }
         throw new UnknownException("Ressource not finded");
     }

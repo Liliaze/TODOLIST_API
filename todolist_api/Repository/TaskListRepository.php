@@ -23,53 +23,53 @@ class TaskListRepository extends PdoHelper
 
     public function createTaskList($taskListModel) {
         $request =  parent::getPdo()->prepare("INSERT INTO tasklist (`id_tasklist`, `id_user`, `title`) VALUES (?, ?, ?)");
-        $result = $request->execute(array($taskListModel->getIdTaskList(), $taskListModel->getIdUser(), $taskListModel->getTitle()));
-        if (!$result)
-            throw new Exception('taskList not created');
-        return $result;
+        $success = $request->execute(array($taskListModel->getIdTaskList(), $taskListModel->getIdUser(), $taskListModel->getTitle()));
+         return $success;
     }
 
     public function updateTaskList($taskListId, $title) {
         $request =  parent::getPdo()->prepare("UPDATE `tasklist` SET `title` = :t WHERE `tasklist`.`id_tasklist` = :id");
         $request->bindParam(":t",$title);
         $request->bindParam(":id",$taskListId);
-        $pdoresults = $request->execute();
-        if (!$pdoresults)
-            throw new Exception('taskList not updated');
-        return $pdoresults;
+        $success = $request->execute();
+        return $success;
     }
 
     public function deleteTaskList($taskListId) {
         $request =  parent::getPdo()->prepare("DELETE FROM `tasklist` WHERE `tasklist`.`id_tasklist` = :id");
         $request->bindParam(":id",$taskListId);
-        $pdoresults = $request->execute();
-        if (!$pdoresults)
-            throw new Exception('taskList not deleted');
-        return $pdoresults;
+        $success = $request->execute();
+        return $success;
     }
 
     public function getTaskList($userId) {
+        //request
         $request =  parent::getPdo()->prepare("SELECT * FROM `tasklist` WHERE id_user LIKE :u");
         $request->bindParam(":u",$userId);
         $request->execute();
+
+        //preparation of the data obtained before return
         $pdoresults = $request->fetchAll();
         $taskListArray = [];
         foreach ($pdoresults as $key => $taskList) {
             $newTaskList = new TaskListModel();
-            $newTaskList->setTaskListByRequest($taskList);
+            $newTaskList->unserialize($taskList);
             $taskListArray[$key] = $newTaskList->serialize();
         }
         return $taskListArray;
     }
 
     public function getTaskListById($taskListId) {
+        //request
         $request =  parent::getPdo()->prepare("SELECT * FROM `tasklist` WHERE `id_tasklist` = :t");
         $request->bindParam(":t",$taskListId);
         $request->execute();
+
+        //preparation of the data obtained before return
         $pdoresults = $request->fetchAll();
         $newTaskList = new TaskListModel();
         if ($pdoresults != null && isset($pdoresults[0])) {
-            $newTaskList->setTaskListByRequest($pdoresults[0]);
+            $newTaskList->unserialize($pdoresults[0]);
         }
         return $newTaskList;
     }

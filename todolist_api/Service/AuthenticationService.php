@@ -8,7 +8,7 @@
 
 require_once "./Repository/UserRepository.php";
 
-class AuthentificationService
+class AuthenticationService
 {
     private static $instance = null;
 
@@ -17,13 +17,13 @@ class AuthentificationService
         if (self::$instance) {
             return self::$instance;
         }
-        self::$instance = new AuthentificationService();
+        self::$instance = new AuthenticationService();
         return self::$instance;
     }
 
     public function createUser($username, $password)
     {
-        //check the format and availability of datas
+        //check the format and availability of data
         if ($this->checkUsernameFormat($username) && $this->checkPasswordFormat($password) &&
             $this->checkAvailabilityUserName($username)) {
             $newUser = new UserModel();
@@ -35,12 +35,9 @@ class AuthentificationService
         throw new Exception('bad format for username or password');
     }
 
-    //function login($username, $password): Success(user->auth_token) |
-    // Error(invalid_credentials) $user = UserRepository->getInstance()->getUserByUsername($username);
-    // if ($user->getPassword() === $password) ..
     public function login($username, $password)
     {
-        //check the format of datas
+        //check the format of data
         if ($this->checkUsernameFormat($username) && $this->checkPasswordFormat($password))
         {
             $userFind = $this->getUserByUsername($username);
@@ -99,14 +96,14 @@ class AuthentificationService
     private function getUserByUsername($username) {
         $userFind = \UserRepository::getInstance()->getUserByUsername($username);
         if (!$userFind) {
-            throw new UnauthorizedException('user not found');
+            throw new UnauthorizedException('User not found');
         }
         return $userFind;
     }
 
     public function checkUserAuthentification($header) {
         if (!isset($header['auth_token'])) {
-            throw new UnauthorizedException('auth_token not define in header');
+            throw new UnauthorizedException('Auth_token not define in header');
         }
         $userFind = $this->getUserByToken($header['auth_token']);
         if (!$userFind)
@@ -117,7 +114,7 @@ class AuthentificationService
     public function getUserByToken($auth_token) {
         $userFind = \UserRepository::getInstance()->getUserByToken($auth_token);
         if (!$userFind) {
-            throw new UnauthorizedException('bad_credential, token not recognize');
+            throw new UnauthorizedException('Bad_credential, token not recognize');
         }
         return $userFind;
     }

@@ -22,19 +22,23 @@ class TaskRepository extends PdoHelper
     }
 
     public function createTask($taskModel) {
+        //request
         $request =  parent::getPdo()->prepare("INSERT INTO task (id_task, id_tasklist, id_user, content, status, created,updated) VALUES (null, ?, ?, ?, ?, NOW(), NOW())");
         $result = $request->execute(array($taskModel->getIdTaskList(), $taskModel->getIdUser(), $taskModel->getContent(), $taskModel->getStatus()));
-        if (!$result)
-            throw new UnknownException('taskList not created');
         return $result;
     }
 
     public function getAllTasksInList($taskListId) {
+        //request
         $request =  parent::getPdo()->prepare("SELECT * FROM `task` WHERE id_tasklist LIKE :id");
         $request->bindParam(":id",$taskListId);
         $success = $request->execute();
+
+        //ckeck success of request
         if (!$success)
             return $success;
+
+        //preparation of the data obtained before return
         $pdoresults = $request->fetchAll();
         $taskArray = [];
         foreach ($pdoresults as $key => $task) {
@@ -46,11 +50,12 @@ class TaskRepository extends PdoHelper
     }
 
     public function getTaskById($taskId) {
+        //request
         $request =  parent::getPdo()->prepare("SELECT * FROM `task` WHERE `id_task` = :id");
         $request->bindParam(":id",$taskId);
-        $success = $request->execute();
-        if (!$success)
-            throw new UnknownException('Task not created');
+        $request->execute();
+
+        //preparation of the data obtained before return
         $pdoresults = $request->fetchAll();
         $newTask = new TaskModel();
         if ($pdoresults != null && isset($pdoresults[0])) {
@@ -60,46 +65,17 @@ class TaskRepository extends PdoHelper
     }
 
     public function updateTask($taskModel) {
+        //request
         $request =  parent::getPdo()->prepare("UPDATE `task` SET `id_tasklist` = ?, `content` = ?, `status` = ?, updated = NOW() WHERE `task`.`id_task` = ?;");
-       /* $request->bindParam(":id",$taskModel->getIdTask());
-        $request->bindParam(":c",$taskModel->getContent());
-        $request->bindParam(":s",$taskModel->getStatus());
-        $request->bindParam(":idtasklist",$taskModel->getIdTaskList());*/
         $success = $request->execute(array($taskModel->getIdTaskList(), $taskModel->getContent(),$taskModel->getStatus(), $taskModel->getIdTask()));
         return $success;
     }
 
     public function deleteTask($taskId) {
+        //request
         $request =  parent::getPdo()->prepare("DELETE FROM `task` WHERE `task`.`id_task` = :id");
         $request->bindParam(":id",$taskId);
         $success = $request->execute();
         return $success;
     }
-/*
-    public function getTaskList($userId) {
-        $request =  parent::getPdo()->prepare("SELECT * FROM `tasklist` WHERE id_user LIKE :u");
-        $request->bindParam(":u",$userId);
-        $request->execute();
-        $pdoresults = $request->fetchAll();
-        $taskListArray = [];
-        foreach ($pdoresults as $key => $taskList) {
-            $newTaskList = new TaskListModel();
-            $newTaskList->setTaskListByRequest($taskList);
-            $taskListArray[$key] = $newTaskList;
-        }
-        return $taskListArray;
-    }
-
-    public function getTaskListById($taskListId) {
-        $request =  parent::getPdo()->prepare("SELECT * FROM `tasklist` WHERE `id_tasklist` = :t");
-        $request->bindParam(":t",$taskListId);
-        $request->execute();
-        $pdoresults = $request->fetchAll();
-        $newTaskList = new TaskListModel();
-        if ($pdoresults != null && isset($pdoresults[0])) {
-            $newTaskList->setTaskListByRequest($pdoresults[0]);
-        }
-        return $newTaskList;
-    }
-*/
 }

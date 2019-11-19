@@ -8,16 +8,16 @@
 
 class HttpResponseModel
 {
-    private $_code = 0;
-    private $_header = "";
-    private $_message = null;
-    private $_HttpResponse = null;
+    private $code = 0;
+    private $header = "";
+    private $message = null;
+    private $HttpResponse = null;
 
     public function __construct($code, $header, $message)
     {
-        $this->_header = $header;
-        $this->_code = $code;
-        $this->_message = $message;
+        $this->header = $header;
+        $this->code = $code;
+        $this->message = $message;
     }
 
     /**
@@ -25,9 +25,9 @@ class HttpResponseModel
      */
     private function setHttpResponse()
     {
-        $this->_HttpResponse['code'] = $this->_code;
-        $this->_HttpResponse['header'] = $this->_header;
-        $this->_HttpResponse['message'] = $this->_message;
+        $this->HttpResponse['code'] = $this->code;
+        $this->HttpResponse['header'] = $this->header;
+        $this->HttpResponse['message'] = $this->message;
     }
     /**
      * @return mixed
@@ -35,7 +35,7 @@ class HttpResponseModel
     public function getHttpResponse()
     {
         $this->setHttpResponse();
-        return $this->_HttpResponse;
+        return $this->HttpResponse;
     }
 
     /**
@@ -43,7 +43,7 @@ class HttpResponseModel
      */
     public function getCode()
     {
-        return $this->_code;
+        return $this->code;
     }
 
     /**
@@ -51,7 +51,7 @@ class HttpResponseModel
      */
     public function setCode($code)
     {
-        $this->_code = $code;
+        $this->code = $code;
     }
 
     /**
@@ -59,7 +59,7 @@ class HttpResponseModel
      */
     public function getHeader()
     {
-        return $this->_header;
+        return $this->header;
     }
 
     /**
@@ -67,7 +67,7 @@ class HttpResponseModel
      */
     public function setHeader($header)
     {
-        $this->_header = $header;
+        $this->header = $header;
     }
 
     /**
@@ -75,7 +75,7 @@ class HttpResponseModel
      */
     public function getMessage()
     {
-        return $this->_message;
+        return $this->message;
     }
 
     /**
@@ -83,7 +83,7 @@ class HttpResponseModel
      */
     public function setMessage($message)
     {
-        $this->_message = $message;
+        $this->message = $message;
     }
 
 

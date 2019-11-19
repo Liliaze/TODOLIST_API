@@ -27,17 +27,16 @@ class Router
 
     private function getRoutes($urlParameterArray, $argumentCount, $headerData, $parameterData) {
 
-        //GET' /api/authToken => AccountController->getInstance()->login(); $request.header: { username, password }
-        if ($argumentCount == 2 && $urlParameterArray[1] == "authToken") {
+        //GET' /api/authToken
+        if ($argumentCount == 2 && $urlParameterArray[1] == "authToken")
             return \AccountController::getInstance()->login($headerData);
-        }
-        //'GET' /api/taskList => TaskListController->getInstance()->getUserTaskLists(); $request.header: { authToken }
+                //'GET' /api/taskList
         else if ($argumentCount == 2 && $urlParameterArray[1] == "taskList")
             return \TaskListController::getInstance()->getUserTaskLists($headerData);
         //'GET' /api/taskList/{idList}
         else if ($argumentCount == 3 && $urlParameterArray[1] == "taskList" && ctype_digit($urlParameterArray[2]))
             return \TaskListController::getInstance()->getUserTaskListById($headerData, $urlParameterArray[2]);
-        //'GET' /api/taskList/{taskListId}/tasks => TaskListController->getInstance()->getTaskListTasks(); $request.header: { authToken }
+        //'GET' /api/taskList/{taskListId}/tasks
         else if ($argumentCount == 4 &&  $urlParameterArray[1] == "taskList" && ctype_digit($urlParameterArray[2]) && $urlParameterArray[3] == "tasks")
             return TaskListController::getInstance()->getTasks($headerData, $urlParameterArray[2]);
         else
@@ -46,19 +45,19 @@ class Router
 
     private function postRoutes($urlParameterArray, $argumentCount, $headerData, $parameterData)
     {
-        //'POST' /api/user => AccountController->getInstance()->signup(); $request.body: { username, password }
+        //'POST' /api/user
         if ($argumentCount == 2 && $urlParameterArray[1] == "user")
             return \AccountController::getInstance()->signup($parameterData);
         //POST /api/taskList
         else if ($argumentCount == 2 && $urlParameterArray[1] == "taskList")
             return TaskListController::getInstance()->createTaskList($headerData, $parameterData);
-        //'POST' /api/taskList/{taskListId} => TaskListController->getInstance()->updateTaskList(); $request : { header: { authToken }, body: { taskIds: int[] } }
+        //'POST' /api/taskList/{taskListId}
         else if ($argumentCount == 3 && $urlParameterArray[1] == "taskList" && ctype_digit($urlParameterArray[2]))
             return TaskListController::getInstance()->updateTaskList($headerData, $urlParameterArray[2], $parameterData);
-        //'POST' /api/taskList/{taskListId}/task => TaskListController->getInstance()->createTask(); $request : { header: { authToken }, body: { name: string, status: string } }
+        //'POST' /api/taskList/{taskListId}/task
         else if ($argumentCount == 4 &&  $urlParameterArray[1] == "taskList" && ctype_digit($urlParameterArray[2]) && $urlParameterArray[3] == "task")
             return TaskListController::getInstance()->createTask($headerData, $urlParameterArray[2], $parameterData);
-        //'POST' /api/task/{taskId} => TaskListController->getInstance()->updateTask(); $request : { header: { authToken }, body: { name: string, status: string } }
+        //'POST' /api/task/{taskId}
         else if ($argumentCount == 3 &&  $urlParameterArray[1] == "task" && ctype_digit($urlParameterArray[2]))
             return TaskListController::getInstance()->updateTask($headerData, $urlParameterArray[2], $parameterData);
         throw new RouterException('No routes matches');
@@ -66,10 +65,10 @@ class Router
 
     private function deleteRoutes($urlParameterArray, $argumentCount, $headerData, $parameterData)
     {
-        //'DELETE' /api/taskList/{taskListId} => TaskListController->getInstance()->deleteTaskList(); $request.header: { authToken }
+        //'DELETE' /api/taskList/{taskListId}
         if ($argumentCount == 3 && $urlParameterArray[1] == "taskList" && ctype_digit($urlParameterArray[2]))
             return TaskListController::getInstance()->deleteTaskList($headerData, $urlParameterArray[2]);
-        //'DELETE' /api/task/{taskId} => TaskListController->getInstance()->deleteTask(); $request.header: { authToken }
+        //'DELETE' /api/task/{taskId}
         else if ($argumentCount == 3 && $urlParameterArray[1] == "task" && ctype_digit($urlParameterArray[2]))
             return TaskListController::getInstance()->deleteTask($headerData, $urlParameterArray[2]);
         else
@@ -81,7 +80,7 @@ class Router
             $this->_method = $_SERVER['REQUEST_METHOD'];
             if (isset($_GET['url'])) {
 
-                //get routes
+                //get route
                 $this->_url = explode('/',$_GET['url']);
                 $this->_argcUrl = count($this->_url);
 
@@ -90,10 +89,10 @@ class Router
                     throw new RouterException('path request need contains [api] in first parameter');
                 }
 
-                //save POST params in $_data
+                //save POST parameters in $_data
                 $this->_data = json_decode(file_get_contents('php://input'), true);
 
-                //save header params in $_header
+                //save header parameters in $_header
                 $this->_header = apache_request_headers();
 
                 //call controllers by request method

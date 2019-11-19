@@ -13,25 +13,18 @@
 class TaskListModel implements Serializable
 {
 
-    private $id_user = 0;
-    private $id_tasklist = 0;
+    private $idUser = 0;
+    private $idTasklist = 0;
     private $title = null;
 
     public function serialize() {
         return array(
-                'id_user' => $this->id_user,
-                'id_tasklist' => $this->id_tasklist,
+                'id_user' => $this->idUser,
+                'id_tasklist' => $this->idTasklist,
                 'title' => $this->title
             );
     }
     public function unserialize($pdoResults) {
-        $this->setIdUser($pdoResults['id_user']);
-        $this->setIdTasklist($pdoResults['id_tasklist']);
-        $this->setTitle($pdoResults['title']);
-    }
-
-    public function setTaskListByRequest($pdoResults)
-    {
         $this->setIdUser($pdoResults['id_user']);
         $this->setIdTasklist($pdoResults['id_tasklist']);
         $this->setTitle($pdoResults['title']);
@@ -49,15 +42,15 @@ class TaskListModel implements Serializable
      */
     public function getIdUser()
     {
-        return $this->id_user;
+        return $this->idUser;
     }
 
     /**
-     * @param int $id_user
+     * @param int $idUser
      */
-    public function setIdUser($id_user)
+    public function setIdUser($idUser)
     {
-        $this->id_user = $id_user;
+        $this->idUser = $idUser;
     }
 
     /**
@@ -65,15 +58,15 @@ class TaskListModel implements Serializable
      */
     public function getIdTasklist()
     {
-        return $this->id_tasklist;
+        return $this->idTasklist;
     }
 
     /**
-     * @param int $id_tasklist
+     * @param int $idTasklist
      */
-    public function setIdTasklist($id_tasklist)
+    public function setIdTasklist($idTasklist)
     {
-        $this->id_tasklist = $id_tasklist;
+        $this->idTasklist = $idTasklist;
     }
 
     /**

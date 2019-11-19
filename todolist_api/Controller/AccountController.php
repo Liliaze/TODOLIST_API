@@ -7,7 +7,7 @@
  */
 
 
-require_once './Service/AuthentificationService.php';
+require_once './Service/AuthenticationServicehp';
 require_once './Model/HttpResponseModel.php';
 
 
@@ -28,7 +28,7 @@ class AccountController
     {
         if (isset($data['username']) && isset($data['password']))
         {
-            $newUser = \AuthentificationService::getInstance()->createUser($data['username'], $data['password']);
+            $newUser = \AuthenticationService::getInstance()->createUser($data['username'], $data['password']);
             if ($newUser) {
                 $array['auth_token'] = $newUser->getToken();
                 return new HttpResponseModel('201', 'Content-Type: application/json', $array);
@@ -41,7 +41,7 @@ class AccountController
     {
         if (isset($data['username']) && isset($data['password']))
         {
-            $token = \AuthentificationService::getInstance()->login($data['username'], $data['password']);
+            $token = \AuthenticationService::getInstance()->login($data['username'], $data['password']);
             if ($token) {
                 $array['auth_token'] = $token;
                 return new HttpResponseModel('200', 'Content-Type: application/json', $array);
