@@ -84,7 +84,7 @@ class TaskModel implements Serializable
     /**
      * @return int
      */
-    public function getIdTasklist()
+    public function getIdTaskList()
     {
         return $this->id_tasklist;
     }
@@ -92,7 +92,7 @@ class TaskModel implements Serializable
     /**
      * @param int $id_tasklist
      */
-    public function setIdTasklist($id_tasklist)
+    public function setIdTaskList($id_tasklist)
     {
         $this->id_tasklist = $id_tasklist;
     }

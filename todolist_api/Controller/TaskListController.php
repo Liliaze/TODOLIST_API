@@ -75,6 +75,17 @@ class TaskListController
         return new HttpResponseModel('200', 'Content-Type: application/json', "taskList n°".$taskListId." has been updated");
     }
 
+    public function updateTask($header, $taskId, $data) {
+        if (!isset($data['id_tasklist']) && !isset($data['content']) && !isset($data['status'])) {
+            throw new FormatException('no data in parameter to update');
+        }
+        $userFind = \AuthentificationService::getInstance()->checkUserAuthentification($header);
+
+        \TaskListService::getInstance()->updateTask($taskId, $userFind->getUserId(), $data);
+
+        return new HttpResponseModel('200', 'Content-Type: application/json', "Task n°".$taskId." has been updated");
+    }
+
     public function deleteTaskList($header, $taskListId) {
         $userFind = \AuthentificationService::getInstance()->checkUserAuthentification($header);
 

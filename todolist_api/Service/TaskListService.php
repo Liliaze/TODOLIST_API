@@ -39,7 +39,7 @@ class TaskListService
 
     public function createTask($content, $userId, $taskListId) {
         //vérifier les droits de l'utilisateur sur la liste et l'éxistence de la liste
-        $this->checkUserRight($taskListId,  $userId);
+        $this->checkUserRightOnTaskList($taskListId,  $userId);
 
         //vérifier le format du contenu
         $this->checkDataFormat($content);
@@ -58,7 +58,7 @@ class TaskListService
     }
     public function updateTaskList($taskListId, $userId, $title)
     {
-        $this->checkUserRight($taskListId,  $userId);
+        $this->checkUserRightOnTaskList($taskListId,  $userId);
         //check format of data
         if ($this->checkDataFormat($title))
         {
@@ -70,9 +70,42 @@ class TaskListService
         throw new UnknownException('TaskList not updated');
     }
 
+    public function updateTask($taskId, $userId, $data) {
+        $this->checkUserRightOnTask($taskId,  $userId);
+
+        $taskInDBToUpdate = $this->getTaskById($taskId, $userId);
+
+        if (isset($data['id_tasklist'])) {
+            if(!ctype_digit($data['id_tasklist'])){
+                throw new FormatException('id_tasklist format not valid');
+            }
+            $this->checkUserRightOnTaskList($data['id_tasklist'], $userId);
+            $taskInDBToUpdate->setIdTasklist($data['id_tasklist']);
+        }
+        if (isset($data['status'])){
+            if(!$this->checkValidStatus($data['status'])) {
+                throw new FormatException('Status not valid');
+            }
+            if ($data['status'] == "deleted") {
+                //to do deleted task;
+                throw new FormatException('deleted status is not implemented');
+            }
+            $taskInDBToUpdate->setStatus($data['status']);
+        }
+        if (isset($data['content'])) {
+            $this->checkDataFormat($data['content']);
+            $taskInDBToUpdate->setContent($data['content']);
+        }
+
+        $success = \TaskRepository::getInstance()->updateTask($taskInDBToUpdate);
+        if ($success)
+            return $success;
+        throw new UnknownException('Task not updated');
+    }
+
     public function deleteTaskList($taskListId, $userId)
     {
-        $this->checkUserRight($taskListId,  $userId);
+        $this->checkUserRightOnTaskList($taskListId,  $userId);
         //Send List in database to update
         if ($deletedListDB = \TaskListRepository::getInstance()->deleteTaskList($taskListId)) {
             return $deletedListDB;
@@ -87,6 +120,15 @@ class TaskListService
         return $taskList;
     }
 
+    public function getTaskById($taskId, $userId) {
+        $task = \TaskRepository::getInstance()->getTaskById($taskId);
+        if (!$task || !$task->getIdTask())
+            throw new NotFoundException("Task not found");
+        if ($task->getIdUser() != $userId)
+            throw new UnauthorizedException("Invalid_rights on this ressources");
+        return $task;
+    }
+
     public function getTaskListById($taskListId, $userId) {
         $taskList = \TaskListRepository::getInstance()->getTaskListById($taskListId);
         if (!$taskList || !$taskList->getIdTasklist())
@@ -98,7 +140,7 @@ class TaskListService
 
     public function getTasksByIdTaskList($taskListId, $userId) {
         //check user rights on this list
-        $this->checkUserRight($taskListId,  $userId);
+        $this->checkUserRightOnTaskList($taskListId,  $userId);
 
         //get all tasks in this listId
         $taskFinded = \TaskRepository::getInstance()->getAllTasksInList($taskListId);
@@ -124,7 +166,7 @@ class TaskListService
         return true;
     }
 
-    private function checkUserRight($taskListId, $userId) {
+    private function checkUserRightOnTaskList($taskListId, $userId) {
         $taskListInDB = $this->getTaskListById($taskListId, $userId);
         if ($taskListInDB){
             return true;
@@ -132,4 +174,29 @@ class TaskListService
         return false;
     }
 
+    private function checkUserRightOnTask($taskId, $userId) {
+        $taskInDB = $this->getTaskById($taskId, $userId);
+        if ($taskInDB){
+            return true;
+        }
+        return false;
+    }
+
+    private function checkValidStatus($status) {
+        switch ($status) {
+            case "active" :
+                return true;
+                break;
+            case "deleted" :
+                return true;
+                break;
+            case "done":
+                return true;
+                break;
+            default:
+                return false;
+                break;
+        }
+        return false;
+    }
 }

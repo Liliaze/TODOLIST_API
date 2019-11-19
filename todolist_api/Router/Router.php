@@ -29,7 +29,7 @@ class Router
 
 
 
-        'POST' /api/task/{taskId} => TaskListController->getInstance()->updateTask(); $request : { header: { authToken }, body: { name: string, status: string } }
+
 
         'DELETE' /api/task/{taskId} => TaskListController->getInstance()->deleteTask(); $request.header: { authToken }
     */
@@ -66,6 +66,9 @@ class Router
         //'POST' /api/taskList/{taskListId}/task => TaskListController->getInstance()->createTask(); $request : { header: { authToken }, body: { name: string, status: string } }
         else if ($argumentCount == 4 &&  $urlParameterArray[1] == "taskList" && ctype_digit($urlParameterArray[2]) && $urlParameterArray[3] == "task")
             return TaskListController::getInstance()->createTask($headerData, $urlParameterArray[2], $parameterData);
+        //'POST' /api/task/{taskId} => TaskListController->getInstance()->updateTask(); $request : { header: { authToken }, body: { name: string, status: string } }
+        else if ($argumentCount == 3 &&  $urlParameterArray[1] == "task" && ctype_digit($urlParameterArray[2]))
+            return TaskListController::getInstance()->updateTask($headerData, $urlParameterArray[2], $parameterData);
         throw new RouterException('No routes matches');
     }
 

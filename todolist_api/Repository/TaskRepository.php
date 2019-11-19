@@ -44,17 +44,31 @@ class TaskRepository extends PdoHelper
         }
         return $taskArray;
     }
-/*
-    public function updateTaskList($taskListId, $title) {
-        $request =  parent::getPdo()->prepare("UPDATE `tasklist` SET `title` = :t WHERE `tasklist`.`id_tasklist` = :id");
-        $request->bindParam(":t",$title);
-        $request->bindParam(":id",$taskListId);
-        $pdoresults = $request->execute();
-        if (!$pdoresults)
-            throw new Exception('taskList not updated');
-        return $pdoresults;
+
+    public function getTaskById($taskId) {
+        $request =  parent::getPdo()->prepare("SELECT * FROM `task` WHERE `id_task` = :id");
+        $request->bindParam(":id",$taskId);
+        $success = $request->execute();
+        if (!$success)
+            throw new UnknownException('Task not created');
+        $pdoresults = $request->fetchAll();
+        $newTask = new TaskModel();
+        if ($pdoresults != null && isset($pdoresults[0])) {
+            $newTask->unserialize($pdoresults[0]);
+        }
+        return $newTask;
     }
 
+    public function updateTask($taskModel) {
+        $request =  parent::getPdo()->prepare("UPDATE `task` SET `id_tasklist` = ?, `content` = ?, `status` = ?, updated = NOW() WHERE `task`.`id_task` = ?;");
+       /* $request->bindParam(":id",$taskModel->getIdTask());
+        $request->bindParam(":c",$taskModel->getContent());
+        $request->bindParam(":s",$taskModel->getStatus());
+        $request->bindParam(":idtasklist",$taskModel->getIdTaskList());*/
+        $success = $request->execute(array($taskModel->getIdTaskList(), $taskModel->getContent(),$taskModel->getStatus(), $taskModel->getIdTask()));
+        return $success;
+    }
+/*
     public function deleteTaskList($taskListId) {
         $request =  parent::getPdo()->prepare("DELETE FROM `tasklist` WHERE `tasklist`.`id_tasklist` = :id");
         $request->bindParam(":id",$taskListId);
