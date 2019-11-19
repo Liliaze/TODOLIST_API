@@ -9,7 +9,7 @@
 require_once "./Model/TaskListModel.php";
 require_once "./Model/TaskModel.php";
 require_once "./Service/TaskListService.php";
-require_once "./Service/AuthenticationService.php
+require_once "./Service/AuthenticationService.php";
 
 class TaskListController
 {

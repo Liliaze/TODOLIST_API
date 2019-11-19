@@ -12,11 +12,9 @@ $HttpResponse = null;
 try {
     $router = new Router();
     $HttpResponse = $router->run();
-    }
-catch (Exception $e) {
-    $HttpResponse = new HttpResponseModel($e->getHttpCode(),  'Content-Type: application/json', $e->getMessage());
-}
-finally {
+} catch (Exception $e) {
+    $HttpResponse = new HttpResponseModel($e->getHttpCode(), 'Content-Type: application/json', $e->getMessage());
+} finally {
     header_remove();
     header($HttpResponse->getHeader());
     http_response_code($HttpResponse->getCode());

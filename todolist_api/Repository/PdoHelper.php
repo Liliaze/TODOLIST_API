@@ -6,27 +6,22 @@
  * Time: 14:50
  */
 
+
 /**
  * Class PdoHelper
  */
 class PdoHelper
 {
-
     /**
      * @var string
      */
-    private $_host = 'localhost';
-    private $_port = "3306";
-    private $_dbName = 'todolist';
-    private $_user = 'root';
-    private $_password ='';
     private $_pdo = null;
 
     protected function getPdo()
     {
+        $database = include './config.php';
         try {
-            $this->_pdo = new PDO('mysql:host='.$this->_host.';port='.$this->_port.';dbname='.$this->_dbName, $this->_user, $this->_password);
-
+            $this->_pdo = new PDO('mysql:host='.$database['host'].';port='.$database['port'].';dbname='.$database['dbName'], $database['user'], $database['password']);
         } catch(Exception $e) {
             throw new \Exception();
         }
