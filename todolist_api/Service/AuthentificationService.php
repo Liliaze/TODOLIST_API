@@ -104,6 +104,16 @@ class AuthentificationService
         return $userFind;
     }
 
+    public function checkUserAuthentification( $token) {
+        if (!isset($token)) {
+            throw new UnauthorizedException('auth_token not define in header');
+        }
+        $userFind = $this->getUserByToken($token);
+        if (!$userFind)
+            throw new UnauthorizedException('498 - invalid auth_token');
+        return $userFind;
+    }
+
     public function getUserByToken($auth_token) {
         $userFind = \UserRepository::getInstance()->getUserByToken($auth_token);
         if (!$userFind) {

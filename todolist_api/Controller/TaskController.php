@@ -22,14 +22,12 @@ function deleteTask(): HttpResponse(200 | 401)
 class TaskController
 {
     private static $instance = null;
-    private static $HttpResponse;
 
     public static function getInstance() {
         if (self::$instance) {
             return self::$instance;
         }
         self::$instance = new TaskController();
-        self::$HttpResponse = new HttpResponseModel();
         return self::$instance;
     }
 
@@ -37,12 +35,11 @@ class TaskController
         if (!isset($data['title'])) {
             throw new FormatException('title of new list not define in parameter');
         }
-        $userFind = $this->checkUserAuthentification($header);
+        $userFind = \AuthentificationService::getInstance()->checkUserAuthentification($header['auth_token']);
 
-        $isCreate = \TaskListService::getInstance()->createTaskList($data['title'], $userFind->getId());
+        $isCreate = \TaskListService::getInstance()->createTaskList($data['title'], $userFind->getUserId());
         if ($isCreate) {
-            self::$HttpResponse->setParams('201', 'Content-Type: application/json', "new list created");
-            return self::$HttpResponse;
+            return new HttpResponseModel('201', 'Content-Type: application/json', "new list created");
         }
     }
 
@@ -50,55 +47,39 @@ class TaskController
         if (!isset($data['title'])) {
             throw new FormatException('new title of list not define in parameter');
         }
-        $userFind = $this->checkUserAuthentification($header);
+        $userFind = \AuthentificationService::getInstance()->checkUserAuthentification($header['auth_token']);
 
-        $isUpdate = \TaskListService::getInstance()->updateTaskList($taskListId, $userFind->getId(), $data['title']);
+        $isUpdate = \TaskListService::getInstance()->updateTaskList($taskListId, $userFind->getUserId(), $data['title']);
         if ($isUpdate) {
-            self::$HttpResponse->setParams('200', 'Content-Type: application/json', "taskList n°".$taskListId." has been updated");
-            return self::$HttpResponse;
+            return new HttpResponseModel('200', 'Content-Type: application/json', "taskList n°".$taskListId." has been updated");
         }
     }
 
     public function deleteTaskList($header, $taskListId) {
-        $userFind = $this->checkUserAuthentification($header);
+        $userFind = \AuthentificationService::getInstance()->checkUserAuthentification($header['auth_token']);
 
-        $isDelete = \TaskListService::getInstance()->deleteTaskList($taskListId, $userFind->getId());
+        $isDelete = \TaskListService::getInstance()->deleteTaskList($taskListId, $userFind->getUserId());
         if ($isDelete) {
-            self::$HttpResponse->setParams('200', 'Content-Type: application/json', "taskList n°".$taskListId." has been deleted");
-            return self::$HttpResponse;
+            return new HttpResponseModel('200', 'Content-Type: application/json', "taskList n°".$taskListId." has been deleted");
         }
     }
 
     public function getUserTaskLists($header) {
-        $userFind = $this->checkUserAuthentification($header);
+        $userFind = \AuthentificationService::getInstance()->checkUserAuthentification($header['auth_token']);
 
-        $taskLists = \TaskListService::getInstance()->getTaskLists($userFind->getId());
+        $taskLists = \TaskListService::getInstance()->getTaskLists($userFind->getUserId());
         if ($taskLists) {
-            self::$HttpResponse->setParams('200', 'Content-Type: application/json', $taskLists);
-            return self::$HttpResponse;
+            return new HttpResponseModel('200', 'Content-Type: application/json', $taskLists);
         }
     }
 
     public function getUserTaskListById($header, $taskListId) {
-        $userFind = $this->checkUserAuthentification($header);
+        $userFind = \AuthentificationService::getInstance()->checkUserAuthentification($header['auth_token']);
 
-        $taskList = \TaskListService::getInstance()->getTaskListById($taskListId, $userFind->getId());
+        $taskList = \TaskListService::getInstance()->getTaskListById($taskListId, $userFind->getUserId());
         if ($taskList) {
-            $taskList;
-            self::$HttpResponse->setParams('200', 'Content-Type: application/json', $taskList);
-            return self::$HttpResponse;
+            return new HttpResponseModel('200', 'Content-Type: application/json', $taskList->serialize());
         }
     }
 
-    private function checkUserAuthentification($header) {
-        if (!isset($header['auth_token'])) {
-            throw new UnauthorizedException('auth_token not define in header');
-        }
-
-        $userFind = \AuthentificationService::getInstance()->getUserByToken($header['auth_token']);
-        if (!$userFind)
-            throw new UnauthorizedException('auth_token not recognize');
-        else
-            return $userFind;
-    }
 }

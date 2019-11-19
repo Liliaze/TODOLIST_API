@@ -13,13 +13,11 @@ class HttpResponseModel
     private $_message = null;
     private $_HttpResponse = null;
 
-    /**
-     * @return mixed
-     */
-    public function getHttpResponse()
+    public function __construct($code, $header, $message)
     {
-        $this->setHttpResponse();
-        return $this->_HttpResponse;
+        $this->_header = $header;
+        $this->_code = $code;
+        $this->_message = $message;
     }
 
     /**
@@ -31,12 +29,13 @@ class HttpResponseModel
         $this->_HttpResponse['header'] = $this->_header;
         $this->_HttpResponse['message'] = $this->_message;
     }
-
-    public function setParams($code, $header, $message)
+    /**
+     * @return mixed
+     */
+    public function getHttpResponse()
     {
-        $this->_header = $header;
-        $this->_code = $code;
-        $this->_message = $message;
+        $this->setHttpResponse();
+        return $this->_HttpResponse;
     }
 
     /**

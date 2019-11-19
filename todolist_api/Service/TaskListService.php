@@ -74,7 +74,7 @@ class TaskListService
         if (!$taskList)
             throw new FormatException("taskList n°".$taskListId." not found");
         if ($taskList->getIdUser() != $userId)
-            throw new UnauthorizedException("invalid_rights on ressources");
+            throw new UnauthorizedException("invalid_rights on this ressources or ressources not exist");
         return $taskList;
     }
 

@@ -6,15 +6,29 @@
  * Time: 10:50
  */
 
+
 /**
  * Class UserModel
  */
-class TaskListModel
+class TaskListModel implements Serializable
 {
 
-    public $id_user = 0;
-    public $id_tasklist = 0;
-    public $title = null;
+    private $id_user = 0;
+    private $id_tasklist = 0;
+    private $title = null;
+
+    public function serialize() {
+        return array(
+                'id_user' => $this->id_user,
+                'id_tasklist' => $this->id_tasklist,
+                'title' => $this->title
+            );
+    }
+    public function unserialize($pdoResults) {
+        $this->setIdUser($pdoResults['id_user']);
+        $this->setIdTasklist($pdoResults['id_tasklist']);
+        $this->setTitle($pdoResults['title']);
+    }
 
     public function setTaskListByRequest($pdoResults)
     {

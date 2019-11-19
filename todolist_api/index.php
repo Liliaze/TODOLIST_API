@@ -6,16 +6,14 @@ require_once './Exception/FormatException.php';
 require_once './Exception/ConflictException.php';
 require_once './Exception/UnauthorizedException.php';
 
-$HttpResponse = new HttpResponseModel();
+$HttpResponse = null;
+
 try {
     $router = new Router();
     $HttpResponse = $router->run();
     }
 catch (Exception $e) {
-    $HttpResponse->setParams($e->getCode(),  'Content-Type: application/json', $e->getMessage());
-    if ($HttpResponse->getCode() == null) {
-        $HttpResponse->setParams('500',  'Content-Type: application/json', $e->getMessage());
-    }
+    $HttpResponse = new HttpResponseModel($e->getHttpCode(),  'Content-Type: application/json', $e->getMessage());
 }
 finally {
     header_remove();

@@ -47,13 +47,6 @@ class Router
         //'GET' /api/taskList/{idList}
         else if ($argumentCount == 3 && $urlParameterArray[1] == "taskList" && ctype_digit($urlParameterArray[2]))
             return \TaskController::getInstance()->getUserTaskListById($headerData, $urlParameterArray[2]);
-        // GET tasks
-        else if ($argumentCount == 1 && $urlParameterArray[1] == "tasks")
-            echo json_encode("get method : tasks");
-        // GET tasks/1
-        else if ($argumentCount == 2 && $urlParameterArray[1] == "tasks")
-            echo json_encode("get method : tasks/1");
-        // GET other
         else
             throw new RouterException('No routes matches');
     }
@@ -69,8 +62,7 @@ class Router
         //'POST' /api/taskList/{taskListId} => TaskController->getInstance()->updateTaskList(); $request : { header: { authToken }, body: { taskIds: int[] } }
         else if ($argumentCount == 3 && $urlParameterArray[1] == "taskList" && ctype_digit($urlParameterArray[2]))
             return TaskController::getInstance()->updateTaskList($headerData, $urlParameterArray[2], $parameterData);
-
-        throw new RouterException('no routes matches');
+        throw new RouterException('No routes matches');
     }
 
     private function deleteRoutes($urlParameterArray, $argumentCount, $headerData, $parameterData)
@@ -79,7 +71,7 @@ class Router
         if ($argumentCount == 3 && $urlParameterArray[1] == "taskList" && ctype_digit($urlParameterArray[2]))
             return TaskController::getInstance()->deleteTaskList($headerData, $urlParameterArray[2]);
         else
-            throw new RouterException('no routes matches');
+            throw new RouterException('No routes matches');
     }
 
     public function run() {

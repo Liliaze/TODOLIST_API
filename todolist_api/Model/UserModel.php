@@ -12,11 +12,25 @@
 class UserModel
 {
 
-    public $id = 0;
-    public $username = null;
-    public $password = null;
-    public $token = null;
+    private $userId = 0;
+    private $username = null;
+    private $password = null;
+    private $token = null;
 
+    public function serialize() {
+        return array(
+            'id_user' => $this->userId,
+            'username' => $this->username,
+            'password' => $this->password,
+            'auth_token' => $this->token
+        );
+    }
+    public function unserialize($pdoResults) {
+        $this->setUserId($pdoResults['id']);
+        $this->setUsername($pdoResults['username']);
+        $this->setPassword($pdoResults['password']);
+        $this->setToken($pdoResults['token']);
+    }
     /**
      * @param $username
      * @param $password
@@ -24,7 +38,7 @@ class UserModel
 
     public function setUserByRequest($pdoResults)
     {
-        $this->setId($pdoResults['id']);
+        $this->setUserId($pdoResults['id']);
         $this->setUsername($pdoResults['username']);
         $this->setPassword($pdoResults['password']);
         $this->setToken($pdoResults['token']);
@@ -32,7 +46,7 @@ class UserModel
 
     public function setUser($id, $username, $password, $token)
     {
-        $this->setId($id);
+        $this->setUserId($id);
         $this->setUsername($username);
         $this->setPassword($password);
         $this->setToken($token);
@@ -88,17 +102,17 @@ class UserModel
     /**
      * @return mixed
      */
-    public function getId()
+    public function getUserId()
     {
-        return $this->id;
+        return $this->userId;
     }
 
     /**
-     * @param mixed $id
+     * @param mixed $userId
      */
-    public function setId($id)
+    public function setUserId($userId)
     {
-        $this->id = $id;
+        $this->userId = $userId;
     }
 
 }

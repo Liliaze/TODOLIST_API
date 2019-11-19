@@ -15,14 +15,12 @@ class AccountController
 {
 
     private static $instance = null;
-    private static $HttpResponse;
 
     public static function getInstance() {
         if (self::$instance) {
             return self::$instance;
         }
         self::$instance = new AccountController();
-        self::$HttpResponse = new HttpResponseModel();
         return self::$instance;
     }
 
@@ -33,8 +31,7 @@ class AccountController
             $newUser = \AuthentificationService::getInstance()->createUser($data['username'], $data['password']);
             if ($newUser) {
                 $array['auth_token'] = $newUser->getToken();
-                self::$HttpResponse->setParams('201', 'Content-Type: application/json', $array);
-                return self::$HttpResponse;
+                return new HttpResponseModel('201', 'Content-Type: application/json', $array);
             }
         }
         throw new FormatException('Username or password not define');
@@ -47,8 +44,7 @@ class AccountController
             $token = \AuthentificationService::getInstance()->login($data['username'], $data['password']);
             if ($token) {
                 $array['auth_token'] = $token;
-                self::$HttpResponse->setParams('200', 'Content-Type: application/json', $array);
-                return self::$HttpResponse;
+                return new HttpResponseModel('200', 'Content-Type: application/json', $array);
             }
         }
         throw new FormatException('Bad username or password');
