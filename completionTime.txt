@@ -1,0 +1,12 @@
+jeudi       7.11.2019:  0.5;
+vendredi    8.11.2019:  1;
+mardi       12.11.2019: 4;
+jeudi       14.11.2019: 4;
+vendredi    15.11.2019: 4;
+lundi       18.11.2019: 4;
+mardi       19.11.2019: 6;
+mercredi    20.11.2019: 2;
+jeudi       21.11.2019:
+vendredi    22.11.2019:
+
+total : environ  XX heures
