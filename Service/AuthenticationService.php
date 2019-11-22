@@ -58,8 +58,8 @@ class AuthenticationService
         else if (!ctype_alnum($username)) {
             throw new FormatException('Username need contains only alphanumeric characters');
         }
-        else if (strlen($username) < 5 || strlen($username) > 30) {
-            throw new FormatException('The length of the username must be between 5 and 30 characters');
+        else if (strlen($username) < 2 || strlen($username) > 30) {
+            throw new FormatException('The length of the username must be between 2 and 30 characters');
         }
         return true;
     }

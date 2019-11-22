@@ -22,7 +22,7 @@ class UserRepository extends PdoHelper
     public function createUser($user) {
         //request
         $request =  parent::getPdo()->prepare("INSERT INTO `user` (`id_user`, `username`, `password`, `token`) VALUES (?, ?, ?, ?)");
-        $result = $request->execute(array($user->getId(), $user->getUsername(), $user->getPassword(), $user->getToken()));
+        $result = $request->execute(array($user->getUserId(), $user->getUsername(), $user->getPassword(), $user->getToken()));
         return $result;
     }
 
