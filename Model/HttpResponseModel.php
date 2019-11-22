@@ -18,6 +18,7 @@ class HttpResponseModel
         $this->header = $header;
         $this->code = $code;
         $this->message = $message;
+        $this->setHttpResponse();
     }
 
     /**

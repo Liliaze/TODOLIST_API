@@ -21,8 +21,13 @@ try {
 } catch (Exception $e) {
     $HttpResponse = new HttpResponseModel($e->getHttpCode(), 'Content-Type: application/json', $e->getMessage());
 } finally {
+
     header_remove();
+    header("Access-Control-Allow-Origin: http://localhost:3000");
+    header("Access-Control-Allow-Headers: Accept, auth-token, Content-Type, password, username, Authorization, Cache-Control, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+    header("Access-Control-Allow-Methods: GET, POST, OPTIONS, DELETE");
     header($HttpResponse->getHeader());
+
     http_response_code($HttpResponse->getCode());
     if (is_array($HttpResponse->getMessage()) || is_object($HttpResponse->getMessage())){
         if (!isAssoc($HttpResponse->getMessage()))

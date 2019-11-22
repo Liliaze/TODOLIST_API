@@ -44,6 +44,8 @@ class Router
                     case 'DELETE' :
                         return $this->methodDeleteRoutes($url, $nbParameterInUrl, $header, $data);
                         break;
+                    case 'OPTIONS' :
+                        return new HttpResponseModel(200, '', 'OK');
                     default:
                         throw new RouterException('No Request Method Matches');
                 }

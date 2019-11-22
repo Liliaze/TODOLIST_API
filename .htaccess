@@ -8,3 +8,4 @@ RewriteCond %{REQUEST_FILENAME} !-d
 
 #redirige toutes les urls vers notre Router/index.php
 RewriteRule ^(.*)$ index.php?url=$1 [NC,L]
+
