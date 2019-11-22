@@ -31,10 +31,10 @@ Mini-projet création d'une API from scratch en PHP, réalisé dans le cadre d'u
 
 # Exemple of request
 
-| Description       | Request path  | Parameter |   Expected return  |
+| Description  | Request path  | Parameter        |Expected return  |
 | :--- | :--- |:--- | :--- |
-| Create user       | 'POST' /api/user                       | Body {username: "root", password: "Root123*"}                           | 201 "auth_token": "mO2F0rED4dVF8u5jvRvoekH4C/oFLgzsOpjXeiEBVq4="  |
-| Login user        | 'GET' /api/authToken                   | Header {username: "root", password: "Root123*"}                         | 200 "auth_token": "mO2F0rED4dVF8u5jvRvoekH4C/oFLgzsOpjXeiEBVq4="  |
+| Create user       | 'POST' /api/user                       | Body {username: "root", password: "Root123*"}                           | 201 "auth_token": "mytoken"  |
+| Login user        | 'GET' /api/authToken                   | Header {username: "root", password: "Root123*"}                         | 200 "auth_token": "mytoken"  |
 | Create a taskList | 'POST' /api/taskList                   | Header {auth_token": "mytoken"} Body {"title: "My first work list"      | 201 "message": "New list created" |
 | Get all taskList  | 'GET' /api/taskList                    | Header {auth_token": "mytoken"}                                         | 200 {"0":{"id_user":26,"id_tasklist":28,"title":"My Home list"}}} |
 | Get one taskList  | 'GET' /api/taskList/{taskListId}       | Header {auth_token": "mytoken"}                                         | 200 {"0":{"id_user":26,"id_tasklist":28,"title":"My Home list"}}} |
@@ -44,11 +44,3 @@ Mini-projet création d'une API from scratch en PHP, réalisé dans le cadre d'u
 | Create a task     | 'POST' /api/taskList/{taskListId}/task | Header {auth_token": "mytoken" Body {"content": "new task"}             | {"message":"New task created"}  |
 | Update a task     | 'POST' /api/task/{taskId}              | Header {auth_token": "mytoken" Body {"content" : "new content", "status" : "done", "id_tasklist" : "29"}| {"message":"Task n°7 has been updated"} |
 | Delete a task     | 'DELETE' /api/task/{taskId}            | Header {auth_token": "mytoken"                                          | 200 {"message":"taskList n°7 has been deleted"} |
-
-
-| Left-aligned | Center-aligned | Right-aligned |
-| :---         |     :---:      |          ---: |
-| git status   | git status     | git status    |
-| git diff     | git diff       | git diff      |
-
-
