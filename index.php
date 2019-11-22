@@ -24,7 +24,7 @@ try {
 
     header_remove();
     header("Access-Control-Allow-Origin: http://localhost:3000");
-    header("Access-Control-Allow-Headers: Accept, auth-token, Content-Type, password, username, Authorization, Cache-Control, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+    header("Access-Control-Allow-Headers: Accept, auth_token, Content-Type, password, username, Authorization, Cache-Control, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
     header("Access-Control-Allow-Methods: GET, POST, OPTIONS, DELETE");
     header($HttpResponse->getHeader());
 

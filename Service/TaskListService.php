@@ -121,8 +121,6 @@ class TaskListService
 
     public function getTaskLists($userId) {
         $taskList = \TaskListRepository::getInstance()->getTaskList($userId);
-        if (!$taskList || !$taskList[0]['tasklist_id'])
-            throw new NotFoundException("TaskLists not found");
         return $taskList;
     }
 
