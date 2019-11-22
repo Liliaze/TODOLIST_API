@@ -44,3 +44,11 @@ Mini-projet création d'une API from scratch en PHP, réalisé dans le cadre d'u
 | Create a task     | 'POST' /api/taskList/{taskListId}/task | Header {auth_token": "mytoken" Body {"content": "new task"}             | {"message":"New task created"}  |
 | Update a task     | 'POST' /api/task/{taskId}              | Header {auth_token": "mytoken" Body {"content" : "new content", "status" : "done", "id_tasklist" : "29"}| {"message":"Task n°7 has been updated"} |
 | Delete a task     | 'DELETE' /api/task/{taskId}            | Header {auth_token": "mytoken"                                          | 200 {"message":"taskList n°7 has been deleted"} |
+
+
+| Left-aligned | Center-aligned | Right-aligned |
+| :---         |     :---:      |          ---: |
+| git status   | git status     | git status    |
+| git diff     | git diff       | git diff      |
+
+
