@@ -13,60 +13,60 @@
 class TaskListModel implements Serializable
 {
 
-    private $idUser = 0;
-    private $idTasklist = 0;
+    private $userId = 0;
+    private $tasklistId = 0;
     private $title = null;
 
     public function serialize() {
         return array(
-                'id_user' => $this->idUser,
-                'id_tasklist' => $this->idTasklist,
+                'user_id' => $this->userId,
+                'tasklist_id' => $this->tasklistId,
                 'title' => $this->title
             );
     }
     public function unserialize($pdoResults) {
-        $this->setIdUser($pdoResults['id_user']);
-        $this->setIdTasklist($pdoResults['id_tasklist']);
+        $this->setUserId($pdoResults['user_id']);
+        $this->setTasklistId($pdoResults['tasklist_id']);
         $this->setTitle($pdoResults['title']);
     }
 
-    public function setTaskList($id_list, $id_user, $title)
+    public function setTaskList($listId, $userId, $title)
     {
-        $this->setIdUser($id_user);
-        $this->setIdTasklist($id_list);
+        $this->setUserId($userId);
+        $this->setTasklistId($listId);
         $this->setTitle($title);
     }
 
     /**
      * @return int
      */
-    public function getIdUser()
+    public function getUserId()
     {
-        return $this->idUser;
+        return $this->userId;
     }
 
     /**
-     * @param int $idUser
+     * @param int $userId
      */
-    public function setIdUser($idUser)
+    public function setUserId($userId)
     {
-        $this->idUser = $idUser;
+        $this->userId = $userId;
     }
 
     /**
      * @return int
      */
-    public function getIdTasklist()
+    public function getTasklistId()
     {
-        return $this->idTasklist;
+        return $this->tasklistId;
     }
 
     /**
-     * @param int $idTasklist
+     * @param int $tasklistId
      */
-    public function setIdTasklist($idTasklist)
+    public function setTasklistId($tasklistId)
     {
-        $this->idTasklist = $idTasklist;
+        $this->tasklistId = $tasklistId;
     }
 
     /**

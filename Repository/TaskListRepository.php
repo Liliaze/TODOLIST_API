@@ -22,13 +22,13 @@ class TaskListRepository extends PdoHelper
     }
 
     public function createTaskList($taskListModel) {
-        $request =  parent::getPdo()->prepare("INSERT INTO tasklist (`id_tasklist`, `id_user`, `title`) VALUES (?, ?, ?)");
-        $success = $request->execute(array($taskListModel->getIdTaskList(), $taskListModel->getIdUser(), $taskListModel->getTitle()));
+        $request =  parent::getPdo()->prepare("INSERT INTO tasklist (`tasklist_id`, `user_id`, `title`) VALUES (?, ?, ?)");
+        $success = $request->execute(array($taskListModel->getTaskListId(), $taskListModel->getUserId(), $taskListModel->getTitle()));
          return $success;
     }
 
     public function updateTaskList($taskListId, $title) {
-        $request =  parent::getPdo()->prepare("UPDATE `tasklist` SET `title` = :t WHERE `tasklist`.`id_tasklist` = :id");
+        $request =  parent::getPdo()->prepare("UPDATE `tasklist` SET `title` = :t WHERE `tasklist`.`tasklist_id` = :id");
         $request->bindParam(":t",$title);
         $request->bindParam(":id",$taskListId);
         $success = $request->execute();
@@ -36,7 +36,7 @@ class TaskListRepository extends PdoHelper
     }
 
     public function deleteTaskList($taskListId) {
-        $request =  parent::getPdo()->prepare("DELETE FROM `tasklist` WHERE `tasklist`.`id_tasklist` = :id");
+        $request =  parent::getPdo()->prepare("DELETE FROM `tasklist` WHERE `tasklist`.`tasklist_id` = :id");
         $request->bindParam(":id",$taskListId);
         $success = $request->execute();
         return $success;
@@ -44,7 +44,7 @@ class TaskListRepository extends PdoHelper
 
     public function getTaskList($userId) {
         //request
-        $request =  parent::getPdo()->prepare("SELECT * FROM `tasklist` WHERE id_user LIKE :u");
+        $request =  parent::getPdo()->prepare("SELECT * FROM `tasklist` WHERE user_id LIKE :u");
         $request->bindParam(":u",$userId);
         $request->execute();
 
@@ -61,7 +61,7 @@ class TaskListRepository extends PdoHelper
 
     public function getTaskListById($taskListId) {
         //request
-        $request =  parent::getPdo()->prepare("SELECT * FROM `tasklist` WHERE `id_tasklist` = :t");
+        $request =  parent::getPdo()->prepare("SELECT * FROM `tasklist` WHERE `tasklist_id` = :t");
         $request->bindParam(":t",$taskListId);
         $request->execute();
 

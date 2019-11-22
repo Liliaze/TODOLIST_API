@@ -75,12 +75,12 @@ class TaskListService
 
         $taskInDBToUpdate = $this->getTaskById($taskId, $userId);
 
-        if (isset($data['id_tasklist'])) {
-            if(!ctype_digit($data['id_tasklist'])){
-                throw new FormatException('id_tasklist format not valid');
+        if (isset($data['tasklist_id'])) {
+            if(!ctype_digit($data['tasklist_id'])){
+                throw new FormatException('tasklist_id format not valid');
             }
-            $this->checkUserRightOnTaskList($data['id_tasklist'], $userId);
-            $taskInDBToUpdate->setIdTasklist($data['id_tasklist']);
+            $this->checkUserRightOnTaskList($data['tasklist_id'], $userId);
+            $taskInDBToUpdate->setTaskListId($data['tasklist_id']);
         }
         if (isset($data['status'])){
             if(!$this->checkValidStatus($data['status'])) {
@@ -121,25 +121,25 @@ class TaskListService
 
     public function getTaskLists($userId) {
         $taskList = \TaskListRepository::getInstance()->getTaskList($userId);
-        if (!$taskList || !$taskList[0]['id_tasklist'])
+        if (!$taskList || !$taskList[0]['tasklist_id'])
             throw new NotFoundException("TaskLists not found");
         return $taskList;
     }
 
     public function getTaskById($taskId, $userId) {
         $task = \TaskRepository::getInstance()->getTaskById($taskId);
-        if (!$task || !$task->getIdTask())
+        if (!$task || !$task->getTaskId())
             throw new NotFoundException("Task not found");
-        if ($task->getIdUser() != $userId)
+        if ($task->getUserId() != $userId)
             throw new UnauthorizedException("Invalid_rights on this ressources");
         return $task;
     }
 
     public function getTaskListById($taskListId, $userId) {
         $taskList = \TaskListRepository::getInstance()->getTaskListById($taskListId);
-        if (!$taskList || !$taskList->getIdTasklist())
+        if (!$taskList || !$taskList->getTasklistId())
             throw new NotFoundException("TaskList ".$taskListId." not found");
-        if ($taskList->getIdUser() != $userId)
+        if ($taskList->getUserId() != $userId)
             throw new UnauthorizedException("Invalid_rights on this ressources");
         return $taskList;
     }

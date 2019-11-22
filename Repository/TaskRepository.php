@@ -23,14 +23,14 @@ class TaskRepository extends PdoHelper
 
     public function createTask($taskModel) {
         //request
-        $request =  parent::getPdo()->prepare("INSERT INTO task (id_task, id_tasklist, id_user, content, status, created, updated) VALUES (null, ?, ?, ?, ?, NOW(), NOW())");
-        $result = $request->execute(array($taskModel->getIdTaskList(), $taskModel->getIdUser(), $taskModel->getContent(), $taskModel->getStatus()));
+        $request =  parent::getPdo()->prepare("INSERT INTO task (task_id, tasklist_id, user_id, content, status, created, updated) VALUES (null, ?, ?, ?, ?, NOW(), NOW())");
+        $result = $request->execute(array($taskModel->getTaskListId(), $taskModel->getUserId(), $taskModel->getContent(), $taskModel->getStatus()));
         return $result;
     }
 
     public function getAllTasksInList($taskListId) {
         //request
-        $request =  parent::getPdo()->prepare("SELECT * FROM `task` WHERE id_tasklist LIKE :id");
+        $request =  parent::getPdo()->prepare("SELECT * FROM `task` WHERE tasklist_id LIKE :id");
         $request->bindParam(":id",$taskListId);
         $success = $request->execute();
 
@@ -51,7 +51,7 @@ class TaskRepository extends PdoHelper
 
     public function getTaskById($taskId) {
         //request
-        $request =  parent::getPdo()->prepare("SELECT * FROM `task` WHERE `id_task` = :id");
+        $request =  parent::getPdo()->prepare("SELECT * FROM `task` WHERE `task_id` = :id");
         $request->bindParam(":id",$taskId);
         $request->execute();
 
@@ -66,14 +66,14 @@ class TaskRepository extends PdoHelper
 
     public function updateTask($taskModel) {
         //request
-        $request =  parent::getPdo()->prepare("UPDATE `task` SET `id_tasklist` = ?, `content` = ?, `status` = ?, updated = NOW() WHERE `task`.`id_task` = ?;");
-        $success = $request->execute(array($taskModel->getIdTaskList(), $taskModel->getContent(),$taskModel->getStatus(), $taskModel->getIdTask()));
+        $request =  parent::getPdo()->prepare("UPDATE `task` SET `tasklist_id` = ?, `content` = ?, `status` = ?, updated = NOW() WHERE `task`.`task_id` = ?;");
+        $success = $request->execute(array($taskModel->getTaskListId(), $taskModel->getContent(),$taskModel->getStatus(), $taskModel->getTaskId()));
         return $success;
     }
 
     public function deleteTask($taskId) {
         //request
-        $request =  parent::getPdo()->prepare("DELETE FROM `task` WHERE `task`.`id_task` = :id");
+        $request =  parent::getPdo()->prepare("DELETE FROM `task` WHERE `task`.`task_id` = :id");
         $request->bindParam(":id",$taskId);
         $success = $request->execute();
         return $success;

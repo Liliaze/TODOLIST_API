@@ -19,14 +19,14 @@ class UserModel
 
     public function serialize() {
         return array(
-            'id_user' => $this->userId,
+            'user_id' => $this->userId,
             'username' => $this->username,
             'password' => $this->password,
             'auth_token' => $this->token
         );
     }
     public function unserialize($pdoResults) {
-        $this->setUserId($pdoResults['id_user']);
+        $this->setUserId($pdoResults['user_id']);
         $this->setUsername($pdoResults['username']);
         $this->setPassword($pdoResults['password']);
         $this->setToken($pdoResults['token']);
@@ -38,7 +38,7 @@ class UserModel
 
     public function setUserByRequest($pdoResults)
     {
-        $this->setUserId($pdoResults['id_user']);
+        $this->setUserId($pdoResults['user_id']);
         $this->setUsername($pdoResults['username']);
         $this->setPassword($pdoResults['password']);
         $this->setToken($pdoResults['token']);
