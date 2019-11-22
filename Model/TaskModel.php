@@ -158,7 +158,7 @@ class TaskModel implements Serializable
      */
     public function setDateUpdate($date_update)
     {
-        $this->date_update = $date_update;
+        $this->updated = $date_update;
     }
 
 }

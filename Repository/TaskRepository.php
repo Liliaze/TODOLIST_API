@@ -23,7 +23,7 @@ class TaskRepository extends PdoHelper
 
     public function createTask($taskModel) {
         //request
-        $request =  parent::getPdo()->prepare("INSERT INTO task (id_task, id_tasklist, id_user, content, status, created,updated) VALUES (null, ?, ?, ?, ?, NOW(), NOW())");
+        $request =  parent::getPdo()->prepare("INSERT INTO task (id_task, id_tasklist, id_user, content, status, created, updated) VALUES (null, ?, ?, ?, ?, NOW(), NOW())");
         $result = $request->execute(array($taskModel->getIdTaskList(), $taskModel->getIdUser(), $taskModel->getContent(), $taskModel->getStatus()));
         return $result;
     }
