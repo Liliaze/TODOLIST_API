@@ -1,7 +1,9 @@
-#Todolist
+# Todolist
+
 Mini-projet création d'une API from scratch en PHP, réalisé dans le cadre d'un test technique pour Médialis
 
-#Subject
+# Subject
+
 * Création d’une API from scratch
 * L’api à réaliser servira à créer des TODOLIST.
 * On doit donc pouvoir ajouter/modifier/supprimer des listes et les items des listes.
@@ -13,7 +15,8 @@ Mini-projet création d'une API from scratch en PHP, réalisé dans le cadre d'u
 * Niveau base de données le choix est libre.
 * Et pour le front, IHM/techno libre.
 
-#Routes
+# Routes
+
 * 'GET' /api/authToken
 * 'GET' /api/taskList
 * 'GET' /api/taskList/{idList}
@@ -26,10 +29,10 @@ Mini-projet création d'une API from scratch en PHP, réalisé dans le cadre d'u
 * 'DELETE' /api/taskList/{taskListId}
 * 'DELETE' /api/task/{taskId}
 
-#Exemple of request
+# Exemple of request
 
-| Description       | Request path                           | Parameter                                                               |   Expected return                                                 | 
-| :---------------- | -------------------------------------- |: ---------------------------------------------------------------------- | :---------------------------------------------------------------- |
+| Description       | Request path                           | Parameter                                                               |   Expected return                                                 |
+| :---------------- | :------------------------------------- |: ---------------------------------------------------------------------- | :---------------------------------------------------------------- |
 | Create user       | 'POST' /api/user                       | Body {username: "root", password: "Root123*"}                           | 201 "auth_token": "mO2F0rED4dVF8u5jvRvoekH4C/oFLgzsOpjXeiEBVq4="  |
 | Login user        | 'GET' /api/authToken                   | Header {username: "root", password: "Root123*"}                         | 200 "auth_token": "mO2F0rED4dVF8u5jvRvoekH4C/oFLgzsOpjXeiEBVq4="  |
 | Create a taskList | 'POST' /api/taskList                   | Header {auth_token": "mytoken"} Body {"title: "My first work list"      | 201 "message": "New list created" |
