@@ -44,7 +44,7 @@ class TaskRepository extends PdoHelper
         foreach ($pdoresults as $key => $task) {
             $newTask = new TaskModel();
             $newTask->unserialize($task);
-            $taskArray[$key] = $newTask->serialize();
+            array_push($taskArray, $newTask->serialize());
         }
         return $taskArray;
     }
