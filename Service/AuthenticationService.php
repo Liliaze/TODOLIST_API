@@ -66,7 +66,7 @@ class AuthenticationService
 
     private function checkPasswordFormat($password) {
         if(!empty($password) && $password != "" ) {
-            if (strlen($password) < 6 || strlen($password) > 12) {
+            if (strlen($password) < 6 || strlen($password) > 30) {
                 throw new FormatException('Password must contain between 6 and 12 characters !');
             } else if (!preg_match("#[0-9]+#", $password)) {
                 throw new FormatException('Password must contain at least 1 Number !');

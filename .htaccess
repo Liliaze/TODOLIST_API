@@ -6,6 +6,6 @@ RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
-#redirige toutes les urls vers notre Router/index.php
+#redirige toutes les urls vers ./index.php
 RewriteRule ^(.*)$ index.php?url=$1 [NC,L]
 

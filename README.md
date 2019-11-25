@@ -2,20 +2,19 @@
 
 Mini-projet création d'une API from scratch en PHP, réalisé dans le cadre d'un test technique pour Médialis
 
-# Subject
+## Subject
 
 * Création d’une API from scratch
 * L’api à réaliser servira à créer des TODOLIST.
 * On doit donc pouvoir ajouter/modifier/supprimer des listes et les items des listes.
 * L’api n’intègrera que le GET / POST / DELETE, on se passera du PUT.
 * Il doit y avoir un petit système de credentials (un token statique est accepté)
-* Le développement doit respecter l’architecture MVC, et la partie back doit être totalement
-* réalisée en objet.
+* Le développement doit respecter l’architecture MVC, et la partie back doit être totalement réalisée en objet.
 * La version de PHP est libre mais a minima du 5.6.
 * Niveau base de données le choix est libre.
 * Et pour le front, IHM/techno libre.
 
-# Routes
+## Routes
 
 * 'GET' /api/authToken
 * 'GET' /api/taskList
@@ -29,7 +28,7 @@ Mini-projet création d'une API from scratch en PHP, réalisé dans le cadre d'u
 * 'DELETE' /api/taskList/{taskListId}
 * 'DELETE' /api/task/{taskId}
 
-# Exemple of request
+## Exemple of request
 
 | Description  | Request path  | Parameter        |Expected return  |
 | :--- | :--- |:--- | :--- |
@@ -45,4 +44,21 @@ Mini-projet création d'une API from scratch en PHP, réalisé dans le cadre d'u
 | Update a task     | 'POST' /api/task/{taskId}              | Header {auth_token": "mytoken" Body {"content" : "new content", "status" : "done", "id_tasklist" : "29"}| 200 {"message":"Task n°7 has been updated"} |
 | Delete a task     | 'DELETE' /api/task/{taskId}            | Header {auth_token": "mytoken"                                          | 200 {"message":"taskList n°7 has been deleted"} |
 
-# 
+## Installation
+
+* Download sources.
+
+```sh
+git clone https://github.com/Liliaze/todolist.git todolist
+cd todolist
+```
+
+* Create your database with `./Migrations/database_setup.sql` file.
+
+* Run your API on localhost server (Ex: WampServer64).
+
+* Configure the parameter of your server on `./config.php`
+
+* Test the running API with :
+  * [Postman](https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop?hl=fr) and the file `Todolist_postman_collection`;
+  * or my project [todolist-app](https://github.com/liliaze/todolist-app).
